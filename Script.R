@@ -8,9 +8,6 @@ test <- c(1:10)
 open(encoding='UTF-8')
 data <- read.csv("Patrimoine_Arbore.csv", dec='.',sep=',')
 
-
-data$X
-
 #Numérique
 for (i in c(1,2,3,9:12,21:23)) {
   data[,i] <- as.numeric(data[,i])
