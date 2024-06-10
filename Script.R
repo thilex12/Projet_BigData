@@ -37,6 +37,10 @@ traitement = function(data){
 
   
   
+  
+  #As factor
+  data$remarquable = as.factor(data$remarquable)
+  
   # length(data[,1])
   return(data)
   
@@ -44,8 +48,11 @@ traitement = function(data){
 
 
 
-
+data = traitement(read.csv("Patrimoine_Arbore.csv", dec='.',sep=','))
 View(data)
+
+
+
 
 data$clc_quartier = iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
 data$clc_secteur = iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
@@ -61,8 +68,25 @@ data$created_date <- as.Date(data$created_date)
 names = colnames(data)
 
 
+# total = sum(summary(data$remarquable))
+total2 = sum(summary(data$remarquable)[2:4])
+freq = c(summary(data$remarquable)[2:4])/total2
+
+plot(freq)
 
 
+
+
+freq_categorielle = function(tab){
+  len = length(summary(tab)) - 1
+  
+  total = sum(summary(tab)[1:len])
+  freq = c(summary(tab)[1:len]) / total
+  
+  hist(freq)
+}
+
+freq_categorielle(data$remarquable)
 
 
 summary(data)
