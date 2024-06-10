@@ -94,18 +94,18 @@ summary(data)
 
 
 
-data$clc_quartier <- iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
-data$clc_secteur <- iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
-data$fk_arb_etat <- iconv(data$fk_arb_etat,from = "latin1" , to="UTF-8")
-data$commentaire_environnement <- iconv(data$commentaire_environnement,from = "latin1" , to="UTF-8") # nolint: line_length_linter.
+# data$clc_quartier <- iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
+# data$clc_secteur <- iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
+# data$fk_arb_etat <- iconv(data$fk_arb_etat,from = "latin1" , to="UTF-8")
+# data$commentaire_environnement <- iconv(data$commentaire_environnement,from = "latin1" , to="UTF-8") # nolint: line_length_linter.
 
 
-data$X <- as.numeric(data$X)
-data$Y <- as.numeric(data$Y)
-data$OBJECTID <- as.numeric(data$OBJECTID)
-data$created_date <- as.Date(data$created_date)
+# data$X <- as.numeric(data$X)
+# data$Y <- as.numeric(data$Y)
+# data$OBJECTID <- as.numeric(data$OBJECTID)
+# data$created_date <- as.Date(data$created_date)
 
-names = colnames(data)
+# names = colnames(data)
 
 
 
@@ -124,9 +124,9 @@ freq_categorielle = function(tab){
   ggplot(freq)
 }
 
-freq_categorielle(data$remarquable)
+# freq_categorielle(data$remarquable)
 
 
-summary(data)
-head(data)
-data[1,1]
+# summary(data)
+# head(data)
+# data[1,1]
