@@ -29,9 +29,10 @@ traitement = function(data){
   data <- data[!is.na(data$X),]
   data <- data[!is.na(data$Y),]
   
-  #
-  
+  #Supprimer les lignes où age_estim>250 => valeur 2010 abérante
   data <- data[data$age_estim<=250,]
+  
+  #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
   data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
   
 
