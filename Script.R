@@ -21,7 +21,7 @@ for (i in c(5:8,13:19,25,26,28:31,33,35:37)) {
 
 
 
-#Suppression des données invalides sur le coordonnées
+#Suppression des données invalides sur le coordonnées dhfcg
 data <- data[!is.na(data$X),]
 data <- data[!is.na(data$Y),]
 
