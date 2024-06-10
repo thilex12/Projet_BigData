@@ -1,7 +1,7 @@
 View(data
      )
 
-data <- read.csv("Patrimoine_Arbore _modif.csv", dec='.',sep=',', quote="\"", header=TRUE)
+data <- read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=',', quote="\"", header=TRUE)
 
 #Numérique
 for (i in c(1:3,9:12,21:23)) {
@@ -21,18 +21,22 @@ for (i in c(5:8,13:19,25,26,28:31,33,35:37)) {
 }
 
 
-
+#Bool pour remarquable
+# data$remarquable = gsub(data$remarquable, pattern = 'Non', replacement=FALSE)
+# data$remarquable = gsub(data$remarquable, pattern = 'Oui', replacement=TRUE)
+# data$remarquable = gsub(data$remarquable, pattern = '', replacement=NA)
 
 #Suppression des données invalides sur le coordonnées
 data <- data[!is.na(data$X),]
 data <- data[!is.na(data$Y),]
 
-a = as.Date(as.character(1), format = "%Y")
-a = as.numeric(a)
-a = as.Date(a)
-a = as.numeric(Sys.Date()) - as.numeric(a)
-a = as.numeric(a)
-a = as.Date(a)
+
+# a = as.Date(as.character(1), format = "%Y")
+# a = as.numeric(a)
+# a = as.Date(a)
+# a = as.numeric(Sys.Date()) - as.numeric(a)
+# a = as.numeric(a)
+# a = as.Date(a)
 
 
 length(data[,1])
