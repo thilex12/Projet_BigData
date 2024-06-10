@@ -25,6 +25,9 @@ for (i in c(5:8,13:19,25,26,28:31,33,35:37)) {
 data <- data[!is.na(data$X),]
 data <- data[!is.na(data$Y),]
 
+#
+data <- data[data$age_estim<=250,]
+
 a = as.Date(as.character(1), format = "%Y")
 a = as.numeric(a)
 a = as.Date(a)
