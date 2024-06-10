@@ -1,15 +1,5 @@
-test <- c(1:10)
-#esrdghjk
-
-#okokok
-
-<<<<<<< HEAD
-#blablablabla
-=======
-#blablabla
-#library(readxl)
 open(encoding='UTF-8')
-data <- read.csv("Patrimoine_Arbore.csv", locale = locale(encoding = "UTF-8"))
+data <- read.csv("Patrimoine_Arbore.csv")
 data$clc_quartier = iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
 data$clc_secteur = iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
 data$fk_arb_etat = iconv(data$fk_arb_etat,from = "latin1" , to="UTF-8")
@@ -19,7 +9,10 @@ for (col in data) {
   data$col = iconv(col,from = "latin1" , to="UTF-8")
 }
 
-View(data)
+for (lig in  data) {
+  data$X[is.na(data$X)] <- 
+  data$X[is.na(data$X)] <- 
+}
+data$villeca[] <- data$villeca["Saint-Quentin"]
 
-summary(data)
->>>>>>> 24a48e04ea2a1f7af904363ed10eccdf4eab4fef
+view(data)
