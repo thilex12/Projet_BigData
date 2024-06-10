@@ -9,10 +9,9 @@ for (col in data) {
   data$col = iconv(col,from = "latin1" , to="UTF-8")
 }
 
-for (lig in  data) {
-  data$X[is.na(data$X)] <- 
-  data$X[is.na(data$X)] <- 
-}
+for (lig in  data){
+  data$X[is.na(data$X)]
+  data$X[is.na(data$X)]}
 data$villeca[] <- data$villeca["Saint-Quentin"]
 
 view(data)
