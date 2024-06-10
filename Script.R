@@ -26,6 +26,7 @@ data <- data[!is.na(data$X),]
 data <- data[!is.na(data$Y),]
 
 #
+
 data <- data[data$age_estim<=250,]
 
 a = as.Date(as.character(1), format = "%Y")
