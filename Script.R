@@ -7,6 +7,7 @@ for (i in c(1:3,9:12,21:23)) {
 }
 
 
+
 #Date
 for (i in c(4,20,24,27,32,34)){
   data[,i] <- as.Date(data[,i])
