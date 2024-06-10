@@ -28,7 +28,7 @@ data <- data[!is.na(data$Y),]
 #
 
 data <- data[data$age_estim<=250,]
-data$stade_dev <- ifelse(data$age_estim == 0, "jeune", data$stade_dev)
+data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
 
 
 a = as.Date(as.character(1), format = "%Y")
