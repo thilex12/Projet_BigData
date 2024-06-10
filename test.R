@@ -7,6 +7,7 @@ data$commentaire_environnement = iconv(data$commentaire_environnement,from = "la
 
 for (col in data) {
   data$col = iconv(col,from = "latin1" , to="UTF-8")
+  
 }
 
 for (lig in  data){
