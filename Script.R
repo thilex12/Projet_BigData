@@ -30,17 +30,17 @@ data <- data[!is.na(data$Y),]
 data <- data[data$age_estim<=250,]
 data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
 
+# 
+# a = as.Date(as.character(1), format = "%Y")
+# a = as.numeric(a)
+# a = as.Date(a)
+# a = as.numeric(Sys.Date()) - as.numeric(a)
+# a = as.numeric(a)
+# a = as.Date(a)
 
-a = as.Date(as.character(1), format = "%Y")
-a = as.numeric(a)
-a = as.Date(a)
-a = as.numeric(Sys.Date()) - as.numeric(a)
-a = as.numeric(a)
-a = as.Date(a)
 
 
-
-length(data[,1])
+# length(data[,1])
 
 View(data)
 
