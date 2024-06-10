@@ -1,5 +1,7 @@
+View(data
+     )
 
-data <- read.csv("Patrimoine_Arbore.csv", dec='.',sep=',')
+data <- read.csv("Patrimoine_Arbore _modif.csv", dec='.',sep=',', quote="\"", header=TRUE)
 
 #Numérique
 for (i in c(1:3,9:12,21:23)) {
