@@ -39,6 +39,7 @@ a = as.numeric(a)
 a = as.Date(a)
 
 
+
 length(data[,1])
 
 View(data)
