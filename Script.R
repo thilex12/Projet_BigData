@@ -9,12 +9,11 @@ open(encoding='UTF-8')
 data <- read.csv("Patrimoine_Arbore.csv", dec='.',sep=',')
 
 
-
+data$X
 
 #Numérique
-for (i in c(1,2,3,7,9:12,21:23)) {
+for (i in c(1,2,3,9:12,21:23)) {
   data[,i] <- as.numeric(data[,i])
-  
 }
 
 #Date
@@ -24,9 +23,20 @@ for (i in c('dte_abattage','EditDate','last_edited_date','created_date','Creatio
 
 
 #Chr UTF-8
-for (i in c()) {
+for (i in c(5:8,13:19,25,26,28:31,33,35:37)) {
   data[,i] = iconv(data[,i],from = "latin1" , to="UTF-8")
 }
+
+
+
+#Suppression des donnée invalide sur le coordonnées
+data <- data[!is.na(data$X),]
+data <- data[!is.na(data$Y),]
+
+
+
+
+length(data[,1])
 
 View(data)
 
