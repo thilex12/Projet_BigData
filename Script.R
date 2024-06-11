@@ -92,6 +92,8 @@ View(data)
 summary(data)
 # View(data$created_user)
 
+# datab <- read.csv("Patrimoine_Arboré_(RO).csv", dec='.',sep=',')
+# View(datab)
 
 
 # data$clc_quartier <- iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
