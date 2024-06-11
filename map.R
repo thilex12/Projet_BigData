@@ -39,7 +39,7 @@ map_arbre <- function(data) {
                           coords = c("x", "y"),
                           crs = 3949)
     points_transformed <- st_transform(points_sf, 4326)
-    points_transformed
+    # points_transformed
 
     coords <- st_coordinates(points_transformed)
     long <- coords[, 1]
@@ -47,18 +47,19 @@ map_arbre <- function(data) {
 
     data_map <- data.frame(x = long, y = lat) %>%
         st_as_sf(coords = c("x", "y"), crs = 4326)
-    
-    
+
+
     data_map %>%
       leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
-      addCircles(radius = 2,
-                 color = colors(data$clc_quartier),
+      addCircles(radius = ifelse(data$remarquable == "Oui",10,2),
+                 color = ifelse(data$remarquable == "Oui","black",colors(data$clc_quartier)),
                  popup = ~paste("ID :", data$id_arbre,
                                 "<br>Quartier :", data$clc_quartier,
                                 "<br>Secteur :", data$clc_secteur,
-                                "<br>Etat :", data$fk_arb_etat))
-      
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable)
+                )
 }
 
 

@@ -34,6 +34,10 @@ traitement <- function(data) {
   # data %>% filter((data$tronc_diam != 0 && data$haut_tronc != 0 && data$haut_tot != 0 && data$age_estim != 0))
   # data <- data[data$age_estim != 0[data$tronc_diam != 0],]
 
+
+  data <- subset(data, !(data$tronc_diam == 0 & data$haut_tronc == 0 & data$haut_tot == 0 & data$age_estim == 0))
+  
+  
   #feuillage
   data$feuillage[data$feuillage == ""] <- "inconnu"
   
@@ -114,7 +118,7 @@ traitement <- function(data) {
 
 
   #As factor 28 -> nom ville
-  for (i in c(5:8, 13, 14,15:17, 19, 25, 26, 30, 31, 36)) {
+  for (i in c(5:8, 13, 14, 15:18, 25, 26, 30, 31, 36)) {
     data[, i] <- as.factor(data[, i])
   }
 
@@ -126,10 +130,6 @@ traitement <- function(data) {
   #Suppression des données invalides sur le coordonnées dhfcg
   data <- data[!is.na(data$X), ]
   data <- data[!is.na(data$Y), ]
-
-  
-
-  # data <- data[(data$tronc_diam != 0 && data$haut_tot != 0 && data$haut_tronc != 0),]
 
 
 
