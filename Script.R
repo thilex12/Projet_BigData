@@ -122,8 +122,8 @@ library(ggplot2)
 
 
 
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
-View(data)
+# data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+# View(data)
 # summary(data)
 # View(data$fk_stadedev)
 
@@ -131,27 +131,14 @@ View(data)
 # View(datab)
 
 
-# data$clc_quartier <- iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
-# data$clc_secteur <- iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
-# data$fk_arb_etat <- iconv(data$fk_arb_etat,from = "latin1" , to="UTF-8")
-# data$commentaire_environnement <- iconv(data$commentaire_environnement,from = "latin1" , to="UTF-8") # nolint: line_length_linter.
-
-
-# data$X <- as.numeric(data$X)
-# data$Y <- as.numeric(data$Y)
-# data$OBJECTID <- as.numeric(data$OBJECTID)
-# data$created_date <- as.Date(data$created_date)
-
-# names = colnames(data)
 
 
 
-
-
+#Stat descriptive univariée
 
 freq_categorielle = function(tab){
   
-  
+  tab <- data[[tab]]
   my_plto <- ggplot(data, aes(tab)) +
     geom_bar( fill = "blue", position="dodge") +
     labs(binwidth = 1, title = "Fréquence des catégories",
@@ -162,8 +149,26 @@ freq_categorielle = function(tab){
   my_plto
 }
 
-freq_categorielle("remarquable")
+# freq_categorielle("remarquable")
 
+
+#Stat descirptive bivariée
+
+freq_biv <- function(tab1, tab2) {
+  tab_1 <- data[[tab1]]
+  tab_2 <- data[[tab2]]
+
+  my_plto <- ggplot(data, aes(x = tab_1, fill = tab_2)) +
+    geom_bar( fill = "blue", position="dodge") +
+    labs(binwidth = 1, title = "Fréquence des catégories",
+         x = "Catégories",
+         y = "Fréquence") +
+    theme_minimal()
+
+  my_plto
+}
+
+# freq_biv("fk_stadedev", "haut_tot")
 
 # summary(data)
 # head(data)
