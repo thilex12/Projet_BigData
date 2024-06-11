@@ -75,13 +75,6 @@ traitement <- function(data) {
 
 
 
-
-age_arbre <- function(arbres) {
-  if(arbres >= 250){return(FALSE)}
-  else{return(TRUE)}
-}
-
-
 install.packages("ggplot2")
 library(ggplot2)
 
@@ -118,15 +111,12 @@ freq_categorielle = function(tab){
   tab <- data.frame(tab)
   len <- length(summary(tab))
   
-  
-  total <- sum(summary(tab))
-  # freq <- c(summary(tab)) / total
   freq <- table(tab)
   
   ggplot(freq)
 }
 
-# freq_categorielle(data$remarquable)
+freq_categorielle(data$remarquable)
 
 
 # summary(data)
