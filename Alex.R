@@ -15,9 +15,9 @@ x[1][1]
 pts <- rep(0, length(data$X))
 for(i in length(data$X)){
 
-    data$X[i] <- st_transform(sf_sfc(st_point(c(data$X[i], data$Y[i]))), crs = 3949, dst = 4326)
+    data$X[i] <- st_transform(st_sfc(st_point(c(data$X[i], data$Y[i]), crs = 3949)), crs = 3949, dst = 4326)
 
 }
 
-View(data$X)
+View(data)
 sfc <- st_sfc()

@@ -37,6 +37,7 @@ traitement <- function(data) {
   #stade de dev
   data$fk_stadedev[] = tolower(data$fk_stadedev)
   data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
+  data$fk_stadedev[is.na(data$fk_stadedev)] <- "inconnu"
 
   #fk_port port de l'abre , forme et strucutre
   data$fk_port[data$fk_port == ""] <- "inconnu"
