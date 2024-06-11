@@ -1,6 +1,6 @@
 
-# data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
-# View(data_vide)
+data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
+View(data_vide)
 
 traitement <- function(data) {
 
@@ -112,6 +112,9 @@ traitement <- function(data) {
   #Suppression des données invalides sur le coordonnées dhfcg
   data <- data[!is.na(data$X), ]
   data <- data[!is.na(data$Y), ]
+
+  #arbre incoherent
+  data <- data[data$fk_arb_etat != "", ]
 
 
 
