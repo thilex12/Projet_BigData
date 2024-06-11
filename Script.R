@@ -26,10 +26,16 @@ traitement <- function(data) {
   #Src geo
   
 
+
+  #Tronc
+
+
+
   #feuillage
   data$feuillage[data$feuillage == ""] <- "inconnu"
   
   #stade de dev
+  data$fk_stadedev[] = tolower(data$fk_stadedev)
   data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
 
   #fk_port port de l'abre , forme et strucutre
