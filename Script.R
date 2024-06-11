@@ -19,6 +19,10 @@ traitement <- function(data) {
 
 
 
+  #Arbre sans quartier
+  data$clc_quartier[data$clc_quartier == ""] <- "inconnu"
+  data$clc_quartier[is.na(data$clc_quartier)] <- "inconnu"
+
   #Gestion User inconnu
   data$created_user[data$created_user == ""] <- "inconnu"
   data$created_user[data$created_user == "Edouard Cauchon"] <- "edouard.cauchon"
