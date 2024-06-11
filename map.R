@@ -64,4 +64,9 @@ map_arbre <- function(data) {
 
 
 
-map_arbre(data)
+# map_arbre(data)
+
+#Save map .html & .png
+saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
+webshot("temp.html", file = "Rplot.png",
+        cliprect = "viewport")
