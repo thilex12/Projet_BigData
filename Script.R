@@ -2,6 +2,8 @@
 # data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 # View(data_vide)
 
+library(dplyr)
+
 traitement <- function(data) {
 
 
@@ -28,8 +30,9 @@ traitement <- function(data) {
 
 
   #Tronc
-
-
+  # data <- data[!(data$tronc_diam == 0 && data$haut_tronc == 0 && data$haut_tot == 0 && data$age_estim == 0),]
+  # data %>% filter((data$tronc_diam != 0 && data$haut_tronc != 0 && data$haut_tot != 0 && data$age_estim != 0))
+  # data <- data[data$age_estim != 0[data$tronc_diam != 0],]
 
   #feuillage
   data$feuillage[data$feuillage == ""] <- "inconnu"
