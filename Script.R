@@ -1,6 +1,6 @@
 
-data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
-View(data_vide)
+# data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
+# View(data_vide)
 
 traitement <- function(data) {
 
@@ -97,6 +97,8 @@ traitement <- function(data) {
 
 
 
+  #arbre incoherent
+  data <- data[data$fk_arb_etat != "", ]  
 
 
   #As factor 28 -> nom ville
@@ -113,9 +115,9 @@ traitement <- function(data) {
   data <- data[!is.na(data$X), ]
   data <- data[!is.na(data$Y), ]
 
-  #arbre incoherent
-  data <- data[data$fk_arb_etat != "", ]
+  
 
+  # data <- data[(data$tronc_diam != 0 && data$haut_tot != 0 && data$haut_tronc != 0),]
 
 
 
