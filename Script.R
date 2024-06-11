@@ -188,22 +188,6 @@ freq_categorielle = function(tab){
 
 #Stat descirptive bivariée
 
-freq_biv <- function(tab1, tab2) {
-  tab_1 <- data[[tab1]]
-  tab_2 <- data[[tab2]]
-
-  my_plto <- ggplot(data, aes(x = tab_1, fill = tab_2)) +
-    geom_bar( fill = "blue", position="dodge") +
-    labs(binwidth = 1, title = "Fréquence des catégories",
-         x = "Catégories",
-         y = "Fréquence") +
-    theme_minimal()
-
-  my_plto
-}
-
-# freq_biv("fk_stadedev", "haut_tot")
-
 # summary(data)
 # head(data)
 # data[1,1]
