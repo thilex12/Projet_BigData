@@ -41,6 +41,9 @@ traitement <- function(data) {
 
   #fk_pied
   data$fk_pied[data$fk_pied == ""] <- "inconnu"
+  data$fk_pied[data$fk_pied == " "] <- "inconnu"
+  data$fk_pied[data$fk_pied == "Terre"] <- "terre"
+  data$fk_pied[data$fk_pied == "Bande de terre"] <- "bande de terre"
 
   #fk_situation
   data$fk_situation[data$fk_situation == ""] <- "inconnu"

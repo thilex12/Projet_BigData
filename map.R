@@ -19,10 +19,12 @@ nantes<-data.frame(points_transformed$) %>%
 mapview(nantes)
 
 map_data <- points_sf
-map <- leaflet() %>% 
-  addTiles() %>%
+map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>% 
+  addTiles(updateWhenZooming = FALSE,      # map won't update tiles until zoom is done
+  updateWhenIdle = TRUE)           # map won't load new tiles when panning
+    %>%
   setView(lng = 3.293264, lat = 49.8405, zoom = 6) %>%
-  addCircles(data = coords, x = ~X, y = ~Y, radius = 0.1)
+  addCirclesMarkers(data = coords, x = ~X, y = ~Y, radius = 1, color='red')
 map
 
 points_sf <- st_as_sf(data.frame(x = c(data$X), y = c(data$Y)), 

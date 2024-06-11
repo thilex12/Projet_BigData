@@ -4,7 +4,7 @@ install.packages("sf")
 library(sf)
 
 data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
-View(data$fk_stadedev)
+View(data$fk_pied)
 
 # x <- st_transform(data$X, crs = st_crs(data$X), dst= 4326)
 sfc = st_sfc(st_point(c(1720320.1079,1721095.6459)), st_point(c(8294619.3561,8293514.7374)), crs = 3949)
