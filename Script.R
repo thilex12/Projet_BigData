@@ -34,10 +34,7 @@ traitement <- function(data) {
   #feuillage
   data$feuillage[data$feuillage == ""] <- "inconnu"
   
-  #stade de dev
-  data$fk_stadedev[] = tolower(data$fk_stadedev)
-  data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
-  data$fk_stadedev[is.na(data$fk_stadedev)] <- "inconnu"
+  
 
   #fk_port port de l'abre , forme et strucutre
   data$fk_port[data$fk_port == ""] <- "inconnu"
@@ -69,6 +66,14 @@ traitement <- function(data) {
     data[, i] <- iconv(data[, i], from = "latin1", to = "UTF-8")
   }
 
+  #stade de dev 14
+  data$fk_stadedev[] = tolower(data$fk_stadedev)
+  data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
+  data$fk_stadedev[is.na(data$fk_stadedev)] <- "inconnu"
+  #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
+  data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
+
+
   #Remarquable
   data$remarquable[data$remarquable == ""] <- "Non"
   data$remarquable[is.na(data$remarquable)] <- "Non"
@@ -81,6 +86,8 @@ traitement <- function(data) {
   }
   
 
+
+
   data$created_user <- as.factor(data$created_user)
   data$last_edited_user <- as.factor(data$last_edited_user)
   data$Creator <- as.factor(data$Creator)
@@ -89,8 +96,11 @@ traitement <- function(data) {
 
 
 
+
+
+
   #As factor 28 -> nom ville
-  for (i in c(5:8, 13, 15:17, 19, 25, 26, 30, 31, 36)) {
+  for (i in c(5:8, 13, 14,15:17, 19, 25, 26, 30, 31, 36)) {
     data[, i] <- as.factor(data[, i])
   }
 
@@ -104,8 +114,7 @@ traitement <- function(data) {
   data <- data[!is.na(data$Y), ]
 
 
-  #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
-  data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
+
 
 
 
@@ -129,7 +138,8 @@ library(ggplot2)
 
 
 
-# data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+View(data$fk_stadedev)
 # View(data)
 # summary(data)
 # View(data$fk_stadedev)
