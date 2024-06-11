@@ -1,6 +1,6 @@
 
-data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
-View(data_vide)
+# data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
+# View(data_vide)
 
 traitement <- function(data) {
 
@@ -138,8 +138,8 @@ library(ggplot2)
 
 
 
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
-View(data$fk_stadedev)
+# data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+# View(data$fk_stadedev)
 # View(data)
 # summary(data)
 # View(data$fk_stadedev)
