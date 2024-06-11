@@ -1,5 +1,8 @@
 source("Script.R")
 
+data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+
+
 install.packages("tidyverse")
 install.packages("patchwork")
 install.packages("lwgeom")
@@ -12,11 +15,7 @@ library(ggplot2)
 library(patchwork)
 library(lwgeom)
 
-nantes<-data.frame(points_transformed$) %>% 
-    st_as_sf(coords = c("lon", "lat")) %>% 
-  st_set_crs(4326)
 
-mapview(nantes)
 
 map_data <- points_sf
 map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>% 
@@ -24,8 +23,9 @@ map <- leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
   updateWhenIdle = TRUE)           # map won't load new tiles when panning
     %>%
   setView(lng = 3.293264, lat = 49.8405, zoom = 6) %>%
-  addCirclesMarkers(data = coords, x = ~X, y = ~Y, radius = 1, color='red')
+  addCircles(data = coords, x = ~X, y = ~Y, radius = 1, color='red')
 map
+
 
 points_sf <- st_as_sf(data.frame(x = c(data$X), y = c(data$Y)), 
                       coords = c("x", "y"), 
@@ -38,9 +38,6 @@ long = coords[,1]
 lat = coords[,2]
 
 
-sfc = st_sfc(st_point(c(0,0)), st_point(c(1,1)))
-sfc %>% st_set_crs(4326) %>% st_transform(3857)
-
 View(coords)
 
 st_crs(points_transformed)
@@ -50,3 +47,18 @@ length(points_transformed[1])
 points_transformed[[1]]
 
 
+
+
+library(sf)
+library(dplyr)
+library(leaflet)
+# install.packages('sf')
+
+data_map <- data.frame(x= long, y= lat) %>%
+    st_as_sf(coords=c("x", "y"), crs=4326)
+  
+  
+data_map %>%
+  leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
+  addTiles() %>%
+  addCircles()
