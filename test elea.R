@@ -30,6 +30,17 @@ data <- data[!is.na(data$Y),]
 data <- data[data$age_estim<=250,]
 data$stade_dev <- ifelse(data$age_estim == 0, "jeune", data$stade_dev)
 
+install.packages("ggplot2")
+library(ggplot2)
+
+ggplot(data, aes(x = clc_quartier, y = haut_tot)) +
+  geom_boxplot() +
+  labs(title = "Boxplot de la hauteur totale des arbres par quartier",
+       x = "Quartier",
+       y = "Hauteur Totale") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 
 a = as.Date(as.character(1), format = "%Y")
 a = as.numeric(a)
