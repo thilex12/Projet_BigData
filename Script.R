@@ -119,7 +119,7 @@ traitement <- function(data) {
   }
 
   #Nom de la ville
-  data$villeca[] <- "CASQ"
+  # data$villeca[] <- "CASQ"
   data$villeca <- as.factor(data$villeca)
 
 
