@@ -61,18 +61,24 @@ traitement <- function(data) {
 
   data$Editor[data$Editor == ""] <- "inconnu"
 
+
+
+  #stade de dev 14
+  
+  data$fk_stadedev[] = tolower(data$fk_stadedev)
+  data$fk_stadedev[is.na(data$fk_stadedev)] <- "inconnu"
+  data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
+  # View(data$fk_stadedev)
+  #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
+  # data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
+  data$fk_stadedev[data$age_estim == 0] <- "jeune"  
+
   #Chr UTF-8
   for (i in c(6:8, 13:19, 25, 26, 28:31, 33, 35:37)) {
     data[, i] <- iconv(data[, i], from = "latin1", to = "UTF-8")
   }
 
-  #stade de dev 14
-  data$fk_stadedev[] = tolower(data$fk_stadedev)
-  data$fk_stadedev[data$fk_stadedev == ""] <- "inconnu"
-  data$fk_stadedev[is.na(data$fk_stadedev)] <- "inconnu"
-  #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
-  data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
-
+  
 
   #Remarquable
   data$remarquable[data$remarquable == ""] <- "Non"
