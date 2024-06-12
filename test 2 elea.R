@@ -51,12 +51,35 @@ ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
 
-
-contingency_table <- table(data$fk_arb_etat, data$fk_pied)
+#test chi2 pour corrélation entre fk_arb_etat et fk_pied
+table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+contingency_table <- table(table_filtree$fk_pied, table_filtree$fk_arb_etat)
 print(contingency_table)
 
-testchi2 <- chisq.test(data$clc_quartier, data$fk_situation)
+testchi2 <- chisq.test(table_filtree$fk_pied, table_filtree$fk_arb_etat)
 testchi2
+
+#mosaicplot du premier test chi2
+mosaicplot(contingency_table, main = "Mosaicplot des états des arbres en fonction du type de sol",
+           xlab = "Type de sol (fk_pied)", ylab = "État de l'arbre (fk_arb_etat)",
+           color = rainbow(length(unique(data$fk_arb_etat))),
+           las=3, par(mai=3))
+
+
+#test chi2 pour corrélation entre le quartier et le feuillage
+contingency_table2 <- table(data$clc_quartier, data$feuillage)
+print(contingency_table2)
+
+testchi2_2 <- chisq.test(data$clc_quartier, data$feuillage)
+testchi2_2
+
+
+#mosaicplot du premier test chi2
+mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des quartiers",
+           xlab = "Quartiers (clc_quartier)", ylab = "Feuillages (feuillage) ",
+           color = rainbow(length(unique(data$fk_arb_etat))),
+           las=3)
+
 
 
 
