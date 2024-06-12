@@ -25,6 +25,7 @@ for (variable in dim(a)[1]) {
   data$haut_tot=unlist(data$haut_tot)
   data$haut_tot[variable] <- a[variable]
 }
+
 indice <- list()
 for (i in 1:nrow(data$haut_tot)) {
   if(data$haut_tot == 0 || is.na(data$haut_tot)){
