@@ -30,7 +30,7 @@ ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
 
 
 # Calculer l'âge moyen des arbres par quartier
-moyenne_ages<-c(rep(NA,lenght(levels(data$clc_quartier))))
+moyenne_ages<-c(rep(NA,length(levels(data$clc_quartier))))
 for(i in list(levels(data$clc_quartier))){
   moyenne_ages[i]<-mean(data$age_estim[data$clc_quartier==i])
 }
