@@ -59,7 +59,7 @@ traitement <- function(data) {
   data$fk_revetement[data$fk_revetement == ""] <- "inconnu"
 
   #tronc_diam
-  data$tronc_diam[] <- data$tronc_diam[]/pi
+  data$tronc_diam[] <- data$tronc_diam[]/pi# Transformation de la circonferenece en diametre
 
   #Gestion User inconnu
   data$created_user[data$created_user == ""] <- "inconnu"

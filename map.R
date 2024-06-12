@@ -26,11 +26,12 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
 # install.packages('sf')
 library(dplyr)
 
-quartiers <- unique(data$clc_quartier)
-colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
 
 
 map_arbre <- function(data) {
+  quartiers <- unique(data$clc_quartier)
+  colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
+
     library(sf)
     library(dplyr)
     library(leaflet)
@@ -61,8 +62,8 @@ map_arbre <- function(data) {
                                 "<br> Remarquable :", data$remarquable)
                 ) %>%
       addLegend(position = "bottomright",
-      colors = c("black", colors(quartiers)),
-      labels = c("Remarquable", quartiers),
+      colors = colors(quartiers),
+      labels = quartiers,
       title = "Quartiers")
     # return(data_map)
 }
