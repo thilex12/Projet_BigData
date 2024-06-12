@@ -29,12 +29,18 @@ library(dplyr)
 
 
 map_arbre <- function(data) {
-  quartiers <- unique(data$clc_quartier)
-  colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
+    
+
+    install.packages("sf")
+    install.packages("dplyr")
+    install.packages("leaflet")
 
     library(sf)
     library(dplyr)
     library(leaflet)
+
+    quartiers <- unique(data$clc_quartier)
+    colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
 
     points_sf <- st_as_sf(data.frame(x = c(data$X), y = c(data$Y)),
                           coords = c("x", "y"),
@@ -72,6 +78,7 @@ map_arbre <- function(data) {
 
 # map_arbre(data)
 
+install.packages("devtools")
 
 library(devtools)
 install_github("wch/webshot")
@@ -82,3 +89,11 @@ library(webshot)
 #Save map .html & .png
 saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
 webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
+
+
+map_web <- function(map){
+    saveWidget(map, "temp.html", selfcontained = FALSE)
+    webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
+}
+
+map_web(map_arbre(data))

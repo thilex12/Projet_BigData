@@ -1,8 +1,8 @@
 
 # data_vide <- read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 # View(data_vide)
-
-library(dplyr)
+install.packages("dplyr")
+library("dplyr")
 
 traitement <- function(data) {
 
