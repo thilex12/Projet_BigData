@@ -119,6 +119,7 @@ for(i in row(data)){
 data_5 <- data[data$haut_tronc != 0 & data$haut_tot != 0 & data$tronc_diam != 0, ]
 
 hauttr_htot_diam <- lm(haut_tronc ~ haut_tot + tronc_diam + age_estim , data = data_5)
+summary(hauttr_htot_diam)
 
 for (i in row(data)){
   if(
@@ -161,7 +162,7 @@ for (i in row(data)){
 data_6 <- data[data$tronc_diam != 0 & data$haut_tot != 0 & data$age_estim != 0 & data$haut_tronc != 0, ]
 
 tronc_diam_htot_age_tronc <- lm(tronc_diam ~ haut_tot + age_estim + haut_tronc, data = data_6)
-# summary(tronc_diam_htot_age_tronc)
+# summary(tronc_diam_htot_age_tronc) #R 0.6 good
 
 for (i in row(data)){
   if(
