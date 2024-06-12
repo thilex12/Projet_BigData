@@ -157,6 +157,8 @@ for (i in row(data)){
 
 
 
+
+
 # Tronc diam ~ haut_tot + age_estim + haut_tronc
 
 data_6 <- data[data$tronc_diam != 0 & data$haut_tot != 0 & data$age_estim != 0 & data$haut_tronc != 0, ]
@@ -177,6 +179,8 @@ for (i in row(data)){
     data$tronc_diam[i] <- predict(tronc_diam_htot_age_tronc, data.frame("haut_tot" = data$haut_tot[i], "age_estim" = data$age_estim[i], "haut_tronc" = data$haut_tronc[i]))
   }
 }
+
+
 
 
 # Prediciton hauteur tronc ~ haut_tot + tronc_diam
