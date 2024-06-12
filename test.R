@@ -1,67 +1,6 @@
-
-data <- read.csv("Patrimoine_Arbore.csv", dec='.',sep=',')
-
-#Numérique
-for (i in c(1:3,9:12,21:23)) {
-  data[,i] <- as.numeric(data[,i])
-}
-
-
-
-#Date
-for (i in c(4,20,24,27,32,34)){
-  data[,i] <- as.Date(data[,i])
-}
-
-
-#Chr UTF-8
-for (i in c(5:8,13:19,25,26,28:31,33,35:37)) {
-  data[,i] <- iconv(data[,i],from = "latin1" , to="UTF-8")
-}
-
-
-
-
-#Suppression des données invalides sur le coordonnées dhfcg
-data <- data[!is.na(data$X),]
-data <- data[!is.na(data$Y),]
-
-#
-
-data <- data[data$age_estim<=250,]
-data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
-
-# 
-# a = as.Date(as.character(1), format = "%Y")
-# a = as.numeric(a)
-# a = as.Date(a)
-# a = as.numeric(Sys.Date()) - as.numeric(a)
-# a = as.numeric(a)
-# a = as.Date(a)
-
-
-
-# length(data[,1])
-
+source("Script.R")
+data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
 View(data)
-
-data$clc_quartier = iconv(data$clc_quartier,from = "latin1" , to="UTF-8")
-data$clc_secteur = iconv(data$clc_secteur,from = "latin1" , to="UTF-8")
-data$fk_arb_etat = iconv(data$fk_arb_etat,from = "latin1" , to="UTF-8")
-data$commentaire_environnement = iconv(data$commentaire_environnement,from = "latin1" , to="UTF-8")
-
-
-data$X <- as.numeric(data$X)
-data$Y <- as.numeric(data$Y)
-data$OBJECTID <- as.numeric(data$OBJECTID)
-data$created_date <- as.Date(data$created_date)
-
-names = colnames(data)
-
-summary(data)
-head(data)
-data[1,1]
-
 
 #fonctionnalité 1
 
@@ -91,7 +30,8 @@ print(bar_plot)
 
 
 #box-plot de la hauteur du tronc
-boxplot_diam_tronc <- ggplot(data, aes(y = tronc_diam)) +
+#on enlèvre les valeurs de tronc_dima qui sont égales à 0 car elles ne sont pas renseignées
+boxplot_diam_tronc <- ggplot(data[data$tronc_diam != 0, ], aes(y = data$tronc_diam[data$tronc_diam != 0])) +
   geom_boxplot(fill = "green") +
   labs(title = "Boxplot du diamètre du tronc",
        y = "Diamètre du tronc") +
@@ -99,15 +39,22 @@ boxplot_diam_tronc <- ggplot(data, aes(y = tronc_diam)) +
 
 print(boxplot_diam_tronc)
 
+length(data$tronc_diam)
+View(test)
+test = data[data$tronc_diam != 0, ]
+length(test$tronc_diam)
+length(data$tronc_diam[data$tronc_diam!=0])
+
 #fonctionnalité 2
 
 
 # Création d'un camembert de la répartition des arbres par stade de développement
+#data$stade_dev[] <- tolower(data$stade_dev) #mettre en minuscule
 pie_chart_stade_dev <- ggplot(data, aes(x = "", fill = fk_stadedev)) +
   geom_bar(width = 1) +
   coord_polar(theta = "y") +
   labs(title = "Répartition des arbres par stade de développement") +
-  theme_void()  # Supprimer les axes
+  theme_void()  
 print(pie_chart_stade_dev)
 
 
@@ -120,3 +67,38 @@ pie_chart_situation <- ggplot(data, aes(x = "", fill = fk_situation)) +
   theme_void()  # Supprimer les axes
 print(pie_chart_situation)
 
+
+#création d'un histogramme de la quantité d'arbres en fonction du quartier
+histogram_quartier <- ggplot(data, aes(x = clc_quartier)) +
+  geom_bar(fill = "blue") +
+  labs(title = "Quantité d'arbres par quartier",
+       x = "Quartier",
+       y = "Quantité d'arbres") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(histogram_quartier)
+
+#fonctionnalité 4
+
+#corrélation age et diamètre tronc de l'arbre
+filtered_data_tronc_diam <- data[data$tronc_diam != 0, ]
+correlation_value_tronc_diam <- cor(filtered_data_tronc_diam$age_estim, filtered_data_tronc_diam$tronc_diam, use = "complete.obs")
+print(correlation_value_tronc_diam)
+correlation_matrix_tronc_diam <- cor(filtered_data_tronc_diam[c("age_estim", "tronc_diam")], use = "complete.obs")
+print(correlation_matrix_tronc_diam)
+
+#corrélation age et hauteur totale de l'arbre
+filtered_data_haut_tot <- data[data$haut_tot != 0, ]
+correlation_value_haut_tot <- cor(filtered_data_haut_tot$age_estim, filtered_data_haut_tot$haut_tot, use = "complete.obs")
+print(correlation_value_haut_tot)
+correlation_matrix_haut_tot <- cor(filtered_data_haut_tot[c("age_estim", "haut_tot")], use = "complete.obs")
+print(correlation_matrix_haut_tot)
+
+
+
+#Conduire des analyses bivariées
+# régression linéaire entre fk_situation et hauteur totale
+
+data_filtered <- data[data$fk_situation != "inconnu", ]
+lm_model_filtered <- lm(haut_tot ~ fk_situation, data = data_filtered)
+summary(lm_model_filtered)
