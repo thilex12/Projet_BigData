@@ -59,12 +59,24 @@ map_arbre <- function(data) {
                                 "<br>Secteur :", data$clc_secteur,
                                 "<br>Etat :", data$fk_arb_etat,
                                 "<br> Remarquable :", data$remarquable)
-                )
+                ) %>%
+      addLegend(position = "bottomright",
+      colors = c("black", colors(quartiers)),
+      labels = c("Remarquable", quartiers),
+      title = "Quartiers")
+    # return(data_map)
 }
 
 
 
 # map_arbre(data)
+
+
+library(devtools)
+install_github("wch/webshot")
+
+library(htmlwidgets)
+library(webshot)
 
 #Save map .html & .png
 saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)

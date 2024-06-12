@@ -59,7 +59,7 @@ traitement <- function(data) {
   data$fk_revetement[data$fk_revetement == ""] <- "inconnu"
 
   #tronc_diam
-  data$tronc_diam[] <- data$tronc_diam[]/100
+  data$tronc_diam[] <- data$tronc_diam[]/pi
 
   #Gestion User inconnu
   data$created_user[data$created_user == ""] <- "inconnu"
@@ -81,7 +81,7 @@ traitement <- function(data) {
   # View(data$fk_stadedev)
   #remplis la colonne du stade avec la valeur "jeune" si age_estim=0
   # data$fk_stadedev <- ifelse(data$age_estim == 0, "jeune", data$fk_stadedev)
-  data$fk_stadedev[data$age_estim == 0] <- "jeune"  
+  # data$fk_stadedev[data$age_estim == 0] <- "jeune"  
 
   #Chr UTF-8
   for (i in c(6:8, 13:19, 25, 26, 28:31, 33, 35:37)) {
@@ -114,7 +114,7 @@ traitement <- function(data) {
 
 
   #arbre incoherent
-  data <- data[data$fk_arb_etat != "", ]  
+  data <- data[data$fk_arb_etat != "", ]
 
 
   #As factor 28 -> nom ville
@@ -138,8 +138,12 @@ traitement <- function(data) {
 
   #age estime
   data$age_estim[data$age_estim > 500] <- NA
-  mean_age <- round(mean(data$age_estim < 500, na.rm = TRUE))
-  data$age_estim[is.na(data$age_estim)] <- mean_age
+  # mean_age <- round(mean(data$age_estim < 500, na.rm = TRUE))
+  data$age_estim[is.na(data$age_estim)] <- 0
+
+  data$haut_tot[is.na(data$haut_tot)] <- 0
+  data$haut_tronc[is.na(data$haut_tronc)] <- 0
+  data$tronc_diam[is.na(data$tronc_diam)] <- 0
 
 
 
@@ -150,8 +154,8 @@ traitement <- function(data) {
 
 
 
-install.packages("ggplot2")
-library(ggplot2)
+# install.packages("ggplot2")
+# library(ggplot2)
 
 
 
