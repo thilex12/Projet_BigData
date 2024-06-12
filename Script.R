@@ -34,6 +34,10 @@ traitement <- function(data) {
   # data %>% filter((data$tronc_diam != 0 && data$haut_tronc != 0 && data$haut_tot != 0 && data$age_estim != 0))
   # data <- data[data$age_estim != 0[data$tronc_diam != 0],]
 
+
+  data <- subset(data, !(data$tronc_diam == 0 & data$haut_tronc == 0 & data$haut_tot == 0 & data$age_estim == 0))
+  
+  
   #feuillage
   data$feuillage[data$feuillage == ""] <- "inconnu"
   
@@ -114,22 +118,18 @@ traitement <- function(data) {
 
 
   #As factor 28 -> nom ville
-  for (i in c(5:8, 13, 14,15:17, 19, 25, 26, 30, 31, 36)) {
+  for (i in c(5:8, 13, 14, 15:18, 25, 26, 30, 31, 36)) {
     data[, i] <- as.factor(data[, i])
   }
 
   #Nom de la ville
-  data$villeca[] <- "CASQ"
+  # data$villeca[] <- "CASQ"
   data$villeca <- as.factor(data$villeca)
 
 
   #Suppression des données invalides sur le coordonnées dhfcg
   data <- data[!is.na(data$X), ]
   data <- data[!is.na(data$Y), ]
-
-  
-
-  # data <- data[(data$tronc_diam != 0 && data$haut_tot != 0 && data$haut_tronc != 0),]
 
 
 
@@ -187,22 +187,6 @@ freq_categorielle = function(tab){
 
 
 #Stat descirptive bivariée
-
-freq_biv <- function(tab1, tab2) {
-  tab_1 <- data[[tab1]]
-  tab_2 <- data[[tab2]]
-
-  my_plto <- ggplot(data, aes(x = tab_1, fill = tab_2)) +
-    geom_bar( fill = "blue", position="dodge") +
-    labs(binwidth = 1, title = "Fréquence des catégories",
-         x = "Catégories",
-         y = "Fréquence") +
-    theme_minimal()
-
-  my_plto
-}
-
-# freq_biv("fk_stadedev", "haut_tot")
 
 # summary(data)
 # head(data)
