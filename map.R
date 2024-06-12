@@ -26,11 +26,12 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
 # install.packages('sf')
 library(dplyr)
 
-quartiers <- unique(data$clc_quartier)
-colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
 
 
 map_arbre <- function(data) {
+  quartiers <- unique(data$clc_quartier)
+  colors <- colorFactor(palette = rainbow(length(quartiers)), levels = quartiers)
+
     library(sf)
     library(dplyr)
     library(leaflet)
@@ -59,12 +60,24 @@ map_arbre <- function(data) {
                                 "<br>Secteur :", data$clc_secteur,
                                 "<br>Etat :", data$fk_arb_etat,
                                 "<br> Remarquable :", data$remarquable)
-                )
+                ) %>%
+      addLegend(position = "bottomright",
+      colors = colors(quartiers),
+      labels = quartiers,
+      title = "Quartiers")
+    # return(data_map)
 }
 
 
 
 # map_arbre(data)
+
+
+library(devtools)
+install_github("wch/webshot")
+
+library(htmlwidgets)
+library(webshot)
 
 #Save map .html & .png
 saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)

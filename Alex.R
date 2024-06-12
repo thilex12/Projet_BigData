@@ -2,36 +2,19 @@ source("Script.R")
 
 install.packages("ggplot2")
 library(ggplot2)
+
 install.packages("sf")
 library(sf)
 
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
-View(data$fk_pied)
-
-# x <- st_transform(data$X, crs = st_crs(data$X), dst= 4326)
-sfc = st_sfc(st_point(c(1720320.1079,1721095.6459)), st_point(c(8294619.3561,8293514.7374)), crs = 3949)
-x =st_transform(sfc, crs = 3949, dst = 4326)
-# st_transform(sfc, 4326)
-x
-x[1][1]
-
-# for(i in length(data$X)){
-
-#     data$X[i],data$Y[i] <- st_transform(st_sfc(st_point(c(data$X[i], data$Y[i]), crs = 3949)), crs = 3949, dst = 4326)
-
-# }
-
-# View(data)
-# sfc <- st_sfc()
-
 install.packages("mapview")
 library(mapview)
+
 install.packages("sp")
 library(sp)
 
-mapview(x = c(data$X,data$Y), xcol = data$X, ycol = data$Y, crs = 3949, dst = 4326)
-spTransform(c(data$X,data$Y), "+init=epsg:3949")
 
+data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+View(data)
 
 
 
@@ -50,7 +33,7 @@ freq_biv <- function(tab1, tab2) {
 }
 
 freq_biv("age_estim", "haut_tot")
-
+ 
 box_plot <- function(tab1, tab2) {
   tab_1 <- data[[tab1]]
   tab_2 <- data[[tab2]]
@@ -66,3 +49,184 @@ box_plot <- function(tab1, tab2) {
 }
 
 box_plot("clc_quartier", "haut_tot")
+
+
+
+
+
+
+
+
+
+
+#Prediction de l'age
+data_3 <- data
+data_3 <- data_3[data_3$tronc_diam != 0, ]
+data_3 <- data_3[!is.na(data_3$tronc_diam), ]
+data_3 <- data_3[data_3$haut_tot != 0, ]
+data_3 <- data_3[!is.na(data_3$haut_tot), ]
+data_3 <- data_3[data_3$haut_tronc != 0, ]
+data_3 <- data_3[!is.na(data_3$haut_tronc), ]
+# View(data_3)
+data_3 <- data_3[data_3$fk_arb_etat == "EN PLACE", ]
+# View(data_3)
+model_3 <- lm(age_estim ~
+                tronc_diam +
+                  haut_tot +
+                  haut_tronc, data = data_3)
+summary(model_3)
+
+length(nrow(data_3))
+
+for (i in row(data)){
+  if (data$age_estim[i] == 0 && data$dk_arb_etat == "EN PLACE") {
+    data$age_estim[i] <- predict(model_3, newdata = data.frame(data$tronc_diam[i], data$haut_tot[i], data$haut_tronc[i]))
+  }
+}
+
+data_3 %>%
+filter((data$tronc_diam != 0 && data$haut_tronc != 0 && data$haut_tot != 0))
+
+# data <- data[data$age_estim != 0[data$tronc_diam != 0],]
+
+data_to_pred <- data[data$age_estim == 0 & data$haut_tot != 0 & data$haut_tronc != 0 & data$tronc_diam != 0,]
+
+
+
+for(i in row(data)){
+  if ((data$age_estim[i] == 0) &
+      (data$haut_tot[i] != 0) &
+      (data$haut_tronc[i] != 0) &
+      (data$tronc_diam[i] != 0) &
+      (data$fk_arb_etat[i] == "EN PLACE"))
+      {
+    data$age_estim[i] <- predict(model_3, data.frame("tronc_diam" = data$tronc_diam[i], "haut_tot" = data$haut_tot[i], "haut_tronc" = data$haut_tronc[i]))
+  }
+}
+
+
+
+
+
+
+
+
+#Prediction des valeurs manquante pour predire les ages manquants
+
+
+#Prediciton hauteur tronc ~ haut_tot + tronc_diam + age_estim
+
+data_5 <- data[data$haut_tronc != 0 & data$haut_tot != 0 & data$tronc_diam != 0, ]
+
+hauttr_htot_diam <- lm(haut_tronc ~ haut_tot + tronc_diam + age_estim , data = data_5)
+
+for (i in row(data)){
+  if(
+    data$haut_tronc[i] == 0 &
+
+    data$haut_tot[i] != 0 &
+    data$tronc_diam[i] != 0 &
+    data$age_estim[i] != 0 &
+
+    data$fk_arb_etat[i] == "EN PLACE"
+  ){
+    data$haut_tronc[i] <- predict(hauttr_htot_diam, data.frame("haut_tot" = data$haut_tot[i], "tronc_diam" = data$tronc_diam[i], "age_estim" = data$age_estim[i]))
+  }
+}
+
+
+
+
+#hauteur tronc ~ haut_tot + age_estim 
+data_4 <- data[data$haut_tronc != 0 & data$haut_tot != 0 & data$age_estim != 0, ]
+
+tronc_haut_age_dev <- lm(haut_tronc ~ haut_tot + age_estim, data = data_4)
+# summary(tronc_haut_age_dev)
+
+for (i in row(data)){
+  if(
+    data$haut_tronc[i] == 0 &
+    data$haut_tot[i] != 0 &
+    data$age_estim[i] != 0 &
+    data$fk_arb_etat[i] == "EN PLACE"
+  ){
+    data$haut_tronc[i] <- predict(tronc_haut_age_dev, data.frame("haut_tot" = data$haut_tot[i], "age_estim" = data$age_estim[i]))
+  }
+}
+
+
+
+# Tronc diam ~ haut_tot + age_estim + haut_tronc
+
+data_6 <- data[data$tronc_diam != 0 & data$haut_tot != 0 & data$age_estim != 0 & data$haut_tronc != 0, ]
+
+tronc_diam_htot_age_tronc <- lm(tronc_diam ~ haut_tot + age_estim + haut_tronc, data = data_6)
+# summary(tronc_diam_htot_age_tronc)
+
+for (i in row(data)){
+  if(
+    data$tronc_diam[i] == 0 &
+
+    data$haut_tot[i] != 0 &
+    data$age_estim[i] != 0 &
+    data$haut_tronc[i] != 0 &
+
+    data$fk_arb_etat[i] == "EN PLACE"
+  ){
+    data$tronc_diam[i] <- predict(tronc_diam_htot_age_tronc, data.frame("haut_tot" = data$haut_tot[i], "age_estim" = data$age_estim[i], "haut_tronc" = data$haut_tronc[i]))
+  }
+}
+
+
+# Prediciton hauteur tronc ~ haut_tot + tronc_diam
+
+data_7 <- data[data$haut_tronc != 0 & data$haut_tot != 0 & data$tronc_diam != 0, ]
+
+tronc_haut_htot_diam <- lm(haut_tronc ~ haut_tot + tronc_diam, data = data_7)
+# summary(tronc_haut_htot_diam)
+
+
+for (i in row(data)){
+  if(
+    data$haut_tronc[i] == 0 &
+
+    data$haut_tot[i] != 0 &
+    data$tronc_diam[i] != 0 &
+
+    data$fk_arb_etat[i] == "EN PLACE"
+  ){
+    data$haut_tronc[i] <- predict(tronc_haut_htot_diam, data.frame("haut_tot" = data$haut_tot[i], "tronc_diam" = data$tronc_diam[i]))
+  }
+}
+
+View(data)
+
+
+
+
+# --- Prediction des ages --- #
+
+data_age <- data[data$haut_tot != 0 & data$haut_tronc != 0 & data$tronc_diam != 0 & data$age_estim != 0, ]
+
+model_age <- lm(age_estim ~ haut_tot + haut_tronc + tronc_diam, data = data_age)
+# summary(model_age)
+
+for (i in row(data)){
+  if(
+    data$age_estim[i] == 0 &
+
+    data$haut_tot[i] != 0 &
+    data$haut_tronc[i] != 0 &
+    data$tronc_diam[i] != 0 &
+
+    data$fk_arb_etat[i] == "EN PLACE"
+  ){
+    data$age_estim[i] <- predict(model_age, data.frame("haut_tot" = data$haut_tot[i], "haut_tronc" = data$haut_tronc[i], "tronc_diam" = data$tronc_diam[i]))
+  }
+}
+
+
+View(data)
+
+# par(mfrow = c(2, 2))
+# plot(tronc_haut_htot_diam)
