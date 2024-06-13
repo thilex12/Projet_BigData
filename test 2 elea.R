@@ -32,65 +32,76 @@ ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
 
 # Calculer l'âge moyen des arbres par quartier
 library(ggplot2)
-moyenne_ages <- numeric(length(levels(data$clc_quartier)))
-# Parcourir chaque niveau de clc_quartier et calculer la moyenne d'âge
-for(i in seq_along(levels(data$clc_quartier))) {
-  niveau <- levels(data$clc_quartier)[i]
-  moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == niveau], na.rm = TRUE)
+mean_age_quartier <- function(data){
+  moyenne_ages <- numeric(length(levels(data$clc_quartier)))
+  # Parcourir chaque niveau de clc_quartier et calculer la moyenne d'âge
+  for(i in seq_along(levels(data$clc_quartier))) {
+    niveau <- levels(data$clc_quartier)[i]
+    moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == niveau], na.rm = TRUE)
+  }
+  data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
+
+  # Représentation graphique
+  ggplot(data_summary, aes(x = clc_quartier, y = moyenne_ages, fill = clc_quartier)) +
+  geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
+  labs(title = "Âges moyens des arbres par quartier",
+    x = "Quartiers",
+    y = "Âges moyens estimés") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  guides(fill = FALSE) #supprime la légende pour les couleurs des quartiers
 }
-data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
-
-# Représentation graphique
-ggplot(data_summary, aes(x = clc_quartier, y = moyenne_ages, fill = clc_quartier)) +
-geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
-labs(title = "Âges moyens des arbres par quartier",
-  x = "Quartiers",
-  y = "Âges moyens estimés") +
-theme_minimal() +
-theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-guides(fill = FALSE) #supprime la légende pour les couleurs des quartiers
-
-
 
 #Situations des arbres en fonction de leur quartier
-ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
-  geom_bar(position = "dodge") + 
-  labs(title = "Situations des arbres en fonction de leur quartier",
-       x = "Quartiers",
-       y = "Nombre d'arbres") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+situa_quartier <- function(data){
+  ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
+    geom_bar(position = "dodge") + 
+    labs(title = "Situations des arbres en fonction de leur quartier",
+         x = "Quartiers",
+         y = "Nombre d'arbres") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
+}
 
+
+
+#fct 4
 
 #test chi2 pour corrélation entre fk_arb_etat et fk_pied
-table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
-contingency_table <- table(table_filtree$fk_pied, table_filtree$fk_arb_etat)
-print(contingency_table)
+ki2_cor_etat_pied <- function(data){
+  table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+  contingency_table <- table(table_filtree$fk_pied, table_filtree$fk_arb_etat)
+  print(contingency_table)
 
-testchi2 <- chisq.test(table_filtree$fk_pied, table_filtree$fk_arb_etat)
-testchi2
+  testchi2 <- chisq.test(table_filtree$fk_pied, table_filtree$fk_arb_etat)
+  testchi2
+}
 
 #mosaicplot du premier test chi2
-mosaicplot(contingency_table, main = "Mosaicplot des états des arbres en fonction du type de sol",
-           xlab = "Type de sol (fk_pied)", ylab = "État de l'arbre (fk_arb_etat)",
-           color = rainbow(length(unique(data$fk_arb_etat))),
-           las=2)#place correctement les labels horizontalement/verticalement 
-
+mosaic_kie2_etat_pied <- function(data){
+  mosaicplot(contingency_table, main = "Mosaicplot des états des arbres en fonction du type de sol",
+             xlab = "Type de sol (fk_pied)", ylab = "État de l'arbre (fk_arb_etat)",
+             color = rainbow(length(unique(data$fk_arb_etat))),
+             las=2)#place correctement les labels horizontalement/verticalement 
+}
 
 #test chi2 pour corrélation entre le quartier et le feuillage
-table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
-contingency_table2 <- table(table_filtree2$clc_quartier, table_filtree2$feuillage)
-print(contingency_table2)
+kie2_cor_quartier_feuillage <- function(data){
+  table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+  contingency_table2 <- table(table_filtree2$clc_quartier, table_filtree2$feuillage)
+  print(contingency_table2)
 
-testchi2_2 <- chisq.test(data$clc_quartier, data$feuillage)
-testchi2_2
-
+  testchi2_2 <- chisq.test(data$clc_quartier, data$feuillage)
+  testchi2_2
+}
 
 #mosaicplot du premier test chi2
+mosaic_kie2_quartier_feuillage <- function(data){
 mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des quartiers",
-           xlab = "Quartiers (clc_quartier)", ylab = "Feuillages (feuillage) ",
-           color = rainbow(length(unique(data$fk_arb_etat))),
-           las=2)
+             xlab = "Quartiers (clc_quartier)", ylab = "Feuillages (feuillage) ",
+             color = rainbow(length(unique(data$fk_arb_etat))),
+             las=2)
+}
 
 
 #régression logistique => quels sont les arbres à abbatre
