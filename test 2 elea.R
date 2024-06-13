@@ -50,6 +50,7 @@ theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 guides(fill = FALSE) #supprime la légende pour les couleurs des quartiers
 
 
+
 #Situations des arbres en fonction de leur quartier
 ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
   geom_bar(position = "dodge") + 
