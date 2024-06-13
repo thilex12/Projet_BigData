@@ -4,7 +4,8 @@
 #  |  _| (_) | | | | (__| |_| | (_) | | | | | | | (_| | | | ||  __/ | |
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |_|
 
-
+#Traitement de la base de données
+source("traitement.R")
 
 #Graph sur la frequences des varaible qualitatives (ou quantitatives)
 
@@ -56,15 +57,6 @@ feuille_par_quartier <- function(data){
     theme(axis.text.x = element_text(angle = 45, hjust = 1))
 }
 # feuille_par_quartier(data)
-
-
-
-
-
-
-
-
-
 
 
 
@@ -124,6 +116,8 @@ situa_quartier <- function(data){
 #  |  _| (_) | | | | (__| |_| | (_) | | | | | | | (_| | | | ||  __/  ___) |
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/ 
 
+
+source("map.R")
 
 
 

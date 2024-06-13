@@ -1,7 +1,7 @@
-source("Script.R")
+# source("Script.R")
 
 
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+# data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
  
 
 
@@ -24,7 +24,7 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
 
 
 # install.packages('sf')
-library(dplyr)
+# library(dplyr)
 
 
 
@@ -92,10 +92,10 @@ map_arbre <- function(data) {
                  group = "Etat"
                 ) %>%
       addLegend(position = "bottomright",
-        colors = colors_etat(etats),
-        labels = etats,
-        title = "Etat de l'arbre",
-        group = "Etat") %>%
+                colors = colors_etat(etats),
+                labels = etats,
+                title = "Etat de l'arbre",
+                group = "Etat") %>%
 
       addCircles(radius = 2,
                  color = colors_dev(data$fk_stadedev),
@@ -107,12 +107,12 @@ map_arbre <- function(data) {
                  group = "Developpement"
                 ) %>%
       addLegend(position = "bottomright",
-      colors = colors_dev(stadedev),
-      labels = stadedev,
-      title = "Stade de devleoppement",
-      group = "Developpement") %>%
+                colors = colors_dev(stadedev),
+                labels = stadedev,
+                title = "Stade de devleoppement",
+                group = "Developpement") %>%
 
-      addLayersControl(baseGroups = c("Quartiers", "Etat de l'arbre", "Developpement"))
+      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement"))
 
 
     
@@ -280,8 +280,8 @@ map_arbre_stadedev <- function(data) {
 
 
 #Save map .html & .png
-saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
-webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
+# saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
+# webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
 
 
 map_web <- function(map){
@@ -298,7 +298,7 @@ map_web <- function(map){
 
 # map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
-map_web(map_arbre(data))
+# map_web(map_arbre(data))
 
 
 
