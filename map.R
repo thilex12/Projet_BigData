@@ -130,9 +130,6 @@ map_arbre <- function(data) {
                 group = "Remarquable") %>%
 
       addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable"))
-
-
-    
 }
 
 
