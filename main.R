@@ -1,4 +1,4 @@
-source("./fichiers_R/functions.R")
+source("functions.R")
 
 
 
@@ -11,3 +11,4 @@ source("./fichiers_R/functions.R")
 #Traitement du la base de données
 #Utilistion d'un .csv modifier avec suppréssion des ` " ` incoherent
 data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".",sep = ","))
+# View(data)
