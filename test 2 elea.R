@@ -111,7 +111,7 @@ lst_abattre <- function(data){
 # data$abattre[resultat > 0.6] <- TRUE
 # View(data$abattre)
 
-
+data  <- lst_abattre(data)
 
 
 
