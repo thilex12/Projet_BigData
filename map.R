@@ -310,6 +310,6 @@ map_web <- function(map){
     webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
 }
 
-# map_web(map_arbre(data))
+map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
 # map_web(map_arbre(data))
