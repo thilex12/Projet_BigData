@@ -91,7 +91,7 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".",sep = ","))
 # Version web de la carte -> creation .htlm et dossier de fichier temp pour faire fonctionner la version web
 # Pour faire fonctoinner, lancer sur un server (local par exemple : "Live Preview" sur VS Code en extension)
 # De base tout les overlay sont selectionné, veillez à ne garder qu'un seul overlay d'ativer à la fois pour ne pa superposer les couleurs et multiplier le nombres de points sur la carte
-map_web(map_arbre(data))
+# map_web(map_arbre(data))
 
 
 
@@ -167,7 +167,7 @@ map_web(map_arbre(data))
 
 #Liste des arbres à abattre -> nouvelle colonne dans la base de données
 
-# data <- lst_abattre(data)
+data <- lst_abattre(data)
 # View(data$abattre)
 # View(data)
 
@@ -183,4 +183,9 @@ map_web(map_arbre(data))
 # quartier_replanter(data)
 
 
+
+# Prediction de l'age des arbres (-- deja inclus dans le traitement --)
+
+# source("prediction_age.R")
+# calcul_clear_age(data)
 

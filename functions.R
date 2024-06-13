@@ -165,16 +165,16 @@ pie_repartition_situation <- function(data){
 
 #création d'un histogramme de la quantité d'arbres en fonction du quartier
 histogram_quartier_fct <- function(data){
-data_quartiers <- data[data$clc_quartier != "inconnu",]
-data_quartiers$clc_quartier <- droplevels(data_quartiers$clc_quartier)
-histogram_quartier <- ggplot(data_quartiers, aes(x = clc_quartier)) +
-  geom_bar(fill = "blue") +
-  labs(title = "Quantité d'arbres par quartier",
-       x = "Quartier",
-       y = "Quantité d'arbres") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-print(histogram_quartier)
+  data_quartiers <- data[data$clc_quartier != "inconnu",]
+  data_quartiers$clc_quartier <- droplevels(data_quartiers$clc_quartier)
+  histogram_quartier <- ggplot(data_quartiers, aes(x = clc_quartier)) +
+    geom_bar(fill = "blue") +
+    labs(title = "Quantité d'arbres par quartier",
+         x = "Quartier",
+         y = "Quantité d'arbres") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  print(histogram_quartier)
 }
 # histogram_quartier_fct(data)
 
@@ -304,18 +304,18 @@ lst_abattre <- function(data){
 
 #fonction qui renvoit le nom des quartiers où le nombre d'arbres est inférieur à la médiane
 quartier_sous_mediane <- function(data){
-find_quartier_with_least_trees <- function(data) {
-  nb_arbres <- table(data$clc_quartier) # Calculer le nombre d'arbres par quartier
-  df_nb_arbres <- as.data.frame(nb_arbres) 
-  colnames(df_nb_arbres) <- c("Quartier", "Nombre_Arbres")
-  median_nb_arbres <- median(df_nb_arbres$Nombre_Arbres)
-  quartiers_below_median <- df_nb_arbres[df_nb_arbres$Nombre_Arbres < median_nb_arbres, "Quartier"]
-  return(quartiers_below_median)
-}
-data_quartier <- data[data$clc_quartier != "inconnu", ]
-data_quartier$clc_quartier <- droplevels(data_quartier$clc_quartier)
-quartier_moins_arbres <- find_quartier_with_least_trees(data_quartier)
-print(quartier_moins_arbres)
+  find_quartier_with_least_trees <- function(data) {
+    nb_arbres <- table(data$clc_quartier) # Calculer le nombre d'arbres par quartier
+    df_nb_arbres <- as.data.frame(nb_arbres) 
+    colnames(df_nb_arbres) <- c("Quartier", "Nombre_Arbres")
+    median_nb_arbres <- median(df_nb_arbres$Nombre_Arbres)
+    quartiers_below_median <- df_nb_arbres[df_nb_arbres$Nombre_Arbres < median_nb_arbres, "Quartier"]
+    return(quartiers_below_median)
+  }
+  data_quartier <- data[data$clc_quartier != "inconnu", ]
+  data_quartier$clc_quartier <- droplevels(data_quartier$clc_quartier)
+  quartier_moins_arbres <- find_quartier_with_least_trees(data_quartier)
+  print(quartier_moins_arbres)
 }
 # quartier_sous_mediane(data)
 
@@ -326,34 +326,34 @@ print(quartier_moins_arbres)
 # Régression pour savoir dans quelle zone il faut planter pour harmoniser le développement global de la ville
 quartier_replanter <- function(data){
   data_zone <- data[data$clc_quartier != "inconnu", ]
-data_zone$clc_quartier <- droplevels(data_zone$clc_quartier)
+  data_zone$clc_quartier <- droplevels(data_zone$clc_quartier)
 
-nb_arbres_zone <- table(data_zone$clc_quartier) # Calcule le nombre d'arbres par quartier
-df_nb_arbres <- as.data.frame(nb_arbres_zone)
-colnames(df_nb_arbres) <- c("quartier", "nb_arbres")
-mediane_arbres <- median(df_nb_arbres$nb_arbres) # Calcule la médiane du nombre d'arbres par quartier
+  nb_arbres_zone <- table(data_zone$clc_quartier) # Calcule le nombre d'arbres par quartier
+  df_nb_arbres <- as.data.frame(nb_arbres_zone)
+  colnames(df_nb_arbres) <- c("quartier", "nb_arbres")
+  mediane_arbres <- median(df_nb_arbres$nb_arbres) # Calcule la médiane du nombre d'arbres par quartier
 
-# variable binaire : 1 si le nombre d'arbres est en dessous de la médiane, sinon 0:
-df_nb_arbres$planter <- ifelse(df_nb_arbres$nb_arbres < mediane_arbres, 1, 0)
+  # variable binaire : 1 si le nombre d'arbres est en dessous de la médiane, sinon 0:
+  df_nb_arbres$planter <- ifelse(df_nb_arbres$nb_arbres < mediane_arbres, 1, 0)
 
-model_logistic <- glm(planter ~ quartier, data = df_nb_arbres, family = binomial) # Régression logistique
-summary(model_logistic)
+  model_logistic <- glm(planter ~ quartier, data = df_nb_arbres, family = binomial) # Régression logistique
+  summary(model_logistic)
 
-resultats <- list()
+  resultats <- list()
 
-for (quartier in df_nb_arbres$quartier) {
-  #quartier_ou_planter <- data.frame(quartier = "Quartier de l'Europe") # Régression logistique
-  #resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
-  #resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
-  #print(resultat_predit_binaire)
+  for (quartier in df_nb_arbres$quartier) {
+    #quartier_ou_planter <- data.frame(quartier = "Quartier de l'Europe") # Régression logistique
+    #resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
+    #resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
+    #print(resultat_predit_binaire)
 
-  #créer une nouvelle colonne  dans la data frame qui sélectionne la colonne "nb d'arbres" pour les lignes correspondant au quartier égal au quartier actuel de la boucle
-  quartier_ou_planter <- data.frame(nb_arbres = df_nb_arbres[df_nb_arbres$quartier == quartier, "nb_arbres"])  
-  resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
-  resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
-  resultats[[quartier]] <- resultat_predit_binaire
-}
+    #créer une nouvelle colonne  dans la data frame qui sélectionne la colonne "nb d'arbres" pour les lignes correspondant au quartier égal au quartier actuel de la boucle
+    quartier_ou_planter <- data.frame(nb_arbres = df_nb_arbres[df_nb_arbres$quartier == quartier, "nb_arbres"])  
+    resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
+    resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
+    resultats[[quartier]] <- resultat_predit_binaire
+  }
 
-print(resultats)
+  print(resultats)
 }
 # quartier_replanter(data)

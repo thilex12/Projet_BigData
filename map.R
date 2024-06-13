@@ -30,7 +30,10 @@
 
 
 map_arbre <- function(data) {
-    
+
+    if(length(data$abattre) == 37){
+        data <- lst_abattre(data)
+    }
 
     install.packages("sf")
     install.packages("dplyr")
@@ -129,7 +132,23 @@ map_arbre <- function(data) {
                 title = "Stade de devleoppement",
                 group = "Remarquable") %>%
 
-      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable"))
+      addCircles(radius = ifelse(data$abattre == TRUE,20,2),
+                 color = ifelse(data$abattre == TRUE,"red","green"),
+                 popup = ~paste("ID :", data$id_arbre,
+                                "<br>Quartier :", data$clc_quartier,
+                                "<br>Secteur :", data$clc_secteur,
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable),
+                 group = "Abattre",
+                #  clusterOptions = markerClusterOptions(iconCreateFunction = JS("function(cluster) { return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>'}); }")),
+                ) %>%
+      addLegend(position = "bottomright",
+                colors = c("#be0000","#016801"),
+                labels = Remarquable,
+                title = "Stade de devleoppement",
+                group = "Abattre") %>%
+
+      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable","Abattre"))
 }
 
 
@@ -310,6 +329,6 @@ map_web <- function(map){
     webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
 }
 
-map_web(map_arbre(data))
+# map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
 # map_web(map_arbre(data))
