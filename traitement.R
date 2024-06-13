@@ -187,8 +187,8 @@ freq_categorielle = function(tab){
   my_plto
 }
 
-# freq_categorielle("remarquable")
-
+# freq_categorielle("clc_quartier")
+# View(data)
 
 #Stat descirptive bivariée
 

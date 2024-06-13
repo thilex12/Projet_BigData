@@ -3,49 +3,67 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=',')) #s�
 
 View(data$fk_arb_etat)
 
+#Fonctionnalité 1
 #Boxplot de la hauteur totale des arbres par quartier
-data_quartier<-data[data$clc_quartier!="inconnu",] #ne prend pas en compte les valeurs "inconnu"
-data_quartier$clc_quartier<-droplevels(data_quartier$clc_quartier)
 
-ggplot(data_quartier, aes(x = clc_quartier, y = haut_tot)) +
-  geom_boxplot() + #pour les boites à moutache
-  labs(title = "Boxplot de la hauteur totale des arbres par quartier",
-       x = "Quartiers",
-       y = "Hauteurs Totales") +
-  theme_minimal() + #pour enlever les carrés gris en arrière plan
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) #pour que nos titres de quartiers ne se superposent pas
+box_haut_tot_quartier <- function(data){
+  data_quartier<-data[data$clc_quartier!="inconnu",] #ne prend pas en compte les valeurs "inconnu"
+  data_quartier$clc_quartier<-droplevels(data_quartier$clc_quartier)
 
-#distribution des types de feuillage par quartier
-data_feuillage<-data[data$feuillage!="inconnu",]
-data_feuillage$feuillage<-droplevels(data_feuillage$feuillage)
+  ggplot(data_quartier, aes(x = clc_quartier, y = haut_tot)) +
+    geom_boxplot() + #pour les boites à moutache
+    labs(title = "Boxplot de la hauteur totale des arbres par quartier",
+         x = "Quartiers",
+         y = "Hauteurs Totales") +
+    theme_minimal() + #pour enlever les carrés gris en arrière plan
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) #pour que nos titres de quartiers ne se superposent pas
+}
 
-ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
-  geom_bar(position = "dodge") +
-  labs(title = "Distribution des types de feuillage par quartier",
-       x = "Quartiers",
-       y = "Nombre d'arbres",
-       fill = "Types de feuillage") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# box_haut_tot_quartier(data)
 
+# Fonctionnalité 1
+
+#Distribution des types de feuillage par quartier
+feuille_par_quartier <- function(data){
+  data_feuillage<-data[data$feuillage!="inconnu",]
+  data_feuillage$feuillage<-droplevels(data_feuillage$feuillage)
+
+  ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
+    geom_bar(position = "dodge") +
+    labs(title = "Distribution des types de feuillage par quartier",
+         x = "Quartiers",
+         y = "Nombre d'arbres",
+         fill = "Types de feuillage") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+}
+# feuille_par_quartier(data)
+
+
+
+
+#Fonctionnalité 2
 
 # Calculer l'âge moyen des arbres par quartier
-moyenne_ages<-c(rep(NA,length(levels(data$clc_quartier))))
-for(i in list(levels(data$clc_quartier))){
-  moyenne_ages[i]<-mean(data$age_estim[data$clc_quartier==i])
+# library("ggplot2")
+mean_age_quartier <- function(data){
+  moyenne_ages <- c(rep(NA,length(levels(data$clc_quartier))))
+  for(i in list(levels(data$clc_quartier))){
+    moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == i])
+  }
+  data_summary <- data.frame(clc_quartier, moyenne_ages)
+
+  # Représentation graphique
+  ggplot(data_summary, aes(x = clc_quartier, y = age_moyen, fill = clc_quartier)) +
+    geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
+    labs(title = "Âges moyens des arbres par quartier",
+      x = "Quartiers",
+      y = "Âges moyens estimés") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+    guides(fill = FALSE) #supprime la légende pour les couleurs des quartiers
 }
-data_summary <- data.frame(clc_quartier, moyenne_ages)
-
-# Représentation graphique
-ggplot(data_summary, aes(x = clc_quartier, y = age_moyen, fill = clc_quartier)) +
-geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
-labs(title = "Âges moyens des arbres par quartier",
-  x = "Quartiers",
-  y = "Âges moyens estimés") +
-theme_minimal() +
-theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-guides(fill = FALSE) #supprime la légende pour les couleurs des quartiers
-
+# mean_age_quartier(data)
 
 #Situations des arbres en fonction de leur quartier
 ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
@@ -56,6 +74,10 @@ ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 
+
+
+
+#Fonctionnalité 4 dest de ki2 et inde
 
 #test chi2 pour corrélation entre fk_arb_etat et fk_pied
 table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
@@ -72,6 +94,7 @@ mosaicplot(contingency_table, main = "Mosaicplot des états des arbres en foncti
            las=2)#place correctement les labels horizontalement/verticalement 
 
 
+
 #test chi2 pour corrélation entre le quartier et le feuillage
 table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
 contingency_table2 <- table(table_filtree2$clc_quartier, table_filtree2$feuillage)
@@ -80,7 +103,6 @@ print(contingency_table2)
 testchi2_2 <- chisq.test(data$clc_quartier, data$feuillage)
 testchi2_2
 
-
 #mosaicplot du premier test chi2
 mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des quartiers",
            xlab = "Quartiers (clc_quartier)", ylab = "Feuillages (feuillage) ",
@@ -88,11 +110,18 @@ mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des
            las=2)
 
 
+
+
+
+
+
+
+
 #régression logistique => quels sont les arbres à abbatre
 
 lst_abattre <- function(data){
-  model<- glm(data$fk_arb_etat != "EN PLACE" ~ data$age + data$fk_stadedev + data$remarquable, family="binomial")
-  # summary(model)
+  model<- glm(data$fk_arb_etat != "EN PLACE" ~ data$age_estim + data$fk_stadedev + data$remarquable, family="binomial")
+  summary(model)
   resultat<-predict(model, data.frame(data),type="response")
   # plot(resultat)
 

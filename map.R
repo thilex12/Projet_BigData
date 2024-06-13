@@ -1,9 +1,10 @@
 source("Script.R")
+source("functions.R")
 
 
 data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
- 
-
+data <- lst_abattre(data)
+# View(data)
 
 
 
@@ -112,7 +113,23 @@ map_arbre <- function(data) {
       title = "Stade de devleoppement",
       group = "Developpement") %>%
 
-      addLayersControl(baseGroups = c("Quartiers", "Etat de l'arbre", "Developpement"))
+      addCircles(radius = 2,
+                 color = ifelse(data$abattre, "red", "green"),
+                 popup = ~paste("ID :", data$id_arbre,
+                                "<br>Quartier :", data$clc_quartier,
+                                "<br>Secteur :", data$clc_secteur,
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable),
+                 group = "A abattre"
+                ) %>%
+      addLegend(position = "bottomright",
+      colors = colors_dev(stadedev),
+      labels = stadedev,
+      title = "Arbre à abbatre",
+      group = "A abattre") %>%
+
+      addLayersControl(baseGroups = c("Quartiers", "Etat de l'arbre", "Developpement", "A abattre"),
+                       options = layersControlOptions(collapsed = FALSE))
 
 
     

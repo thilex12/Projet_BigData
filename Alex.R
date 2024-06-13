@@ -59,52 +59,6 @@ box_plot("clc_quartier", "haut_tot")
 
 
 
-#Prediction de l'age
-data_3 <- data
-data_3 <- data_3[data_3$tronc_diam != 0, ]
-data_3 <- data_3[!is.na(data_3$tronc_diam), ]
-data_3 <- data_3[data_3$haut_tot != 0, ]
-data_3 <- data_3[!is.na(data_3$haut_tot), ]
-data_3 <- data_3[data_3$haut_tronc != 0, ]
-data_3 <- data_3[!is.na(data_3$haut_tronc), ]
-# View(data_3)
-data_3 <- data_3[data_3$fk_arb_etat == "EN PLACE", ]
-# View(data_3)
-model_3 <- lm(age_estim ~
-                tronc_diam +
-                  haut_tot +
-                  haut_tronc, data = data_3)
-summary(model_3)
-
-length(nrow(data_3))
-
-for (i in row(data)){
-  if (data$age_estim[i] == 0 && data$dk_arb_etat == "EN PLACE") {
-    data$age_estim[i] <- predict(model_3, newdata = data.frame(data$tronc_diam[i], data$haut_tot[i], data$haut_tronc[i]))
-  }
-}
-
-data_3 %>%
-filter((data$tronc_diam != 0 && data$haut_tronc != 0 && data$haut_tot != 0))
-
-# data <- data[data$age_estim != 0[data$tronc_diam != 0],]
-
-data_to_pred <- data[data$age_estim == 0 & data$haut_tot != 0 & data$haut_tronc != 0 & data$tronc_diam != 0,]
-
-
-
-for(i in row(data)){
-  if ((data$age_estim[i] == 0) &
-      (data$haut_tot[i] != 0) &
-      (data$haut_tronc[i] != 0) &
-      (data$tronc_diam[i] != 0) &
-      (data$fk_arb_etat[i] == "EN PLACE"))
-      {
-    data$age_estim[i] <- predict(model_3, data.frame("tronc_diam" = data$tronc_diam[i], "haut_tot" = data$haut_tot[i], "haut_tronc" = data$haut_tronc[i]))
-  }
-}
-
-
 
 
 
