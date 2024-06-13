@@ -41,7 +41,7 @@ for(i in seq_along(levels(data$clc_quartier))) {
 data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
 
 # Représentation graphique
-ggplot(data_summary, aes(x = clc_quartier, y = age_moyen, fill = clc_quartier)) +
+ggplot(data_summary, aes(x = clc_quartier, y = moyenne_ages, fill = clc_quartier)) +
 geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
 labs(title = "Âges moyens des arbres par quartier",
   x = "Quartiers",
