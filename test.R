@@ -112,7 +112,7 @@ print(contingency_table_feuillage)
 testchi2 <- chisq.test(table_filtree_feuillage$feuillage, table_filtree_feuillage$nomlatin)
 testchi2
 
-#fonctionnalité 5 - 
+#fonctionnalité 5 -
 
 #fonction qui renvoit le nom des quartiers où le nombre d'arbres est inférieur à la médiane
 find_quartier_with_least_trees <- function(data) {

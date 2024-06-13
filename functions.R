@@ -60,8 +60,33 @@ feuille_par_quartier <- function(data){
 
 
 
+#Histogramme de la hauteur totale avec mètre par mètre
+
+hist_haut_tot <- function(data){
+  histogram <- ggplot(data, aes(x = haut_tot)) +
+    geom_histogram(binwidth = 1,fill = "red") +
+    labs(title = "Histogramme de la hauteur totale",
+         x = "Hauteur totale",
+         y = "Fréquence") +
+    theme_minimal()
+
+  histogram
+}
+# hist_haut_tot(data)
 
 
+
+#box-plot de la hauteur du tronc
+#on enlèvre les valeurs de tronc_dima qui sont égales à 0 car elles ne sont pas renseignées
+boxplot_haut_tronc <- function(data){  
+  boxplot_diam_tronc <- ggplot(data[data$tronc_diam != 0, ], aes(y = data$tronc_diam[data$tronc_diam != 0])) +
+  geom_boxplot(fill = "green") +
+  labs(title = "Boxplot du diamètre du tronc",
+       y = "Diamètre du tronc") +
+  theme_minimal()
+}
+
+# boxplot_haut_tronc(data)
 
 
 #   _____                _   _                         _ _ _    __   ____  
@@ -109,13 +134,56 @@ situa_quartier <- function(data){
 
 
 
+# Création d'un camembert de la répartition des arbres par stade de développement
+pie_stade_dev <- function(data){
+  pie_chart_stade_dev <- ggplot(data, aes(x = "", fill = fk_stadedev)) +
+    geom_bar(width = 1) +
+    coord_polar(theta = "y") +
+    labs(title = "Répartition des arbres par stade de développement") +
+    theme_void()  
+  print(pie_chart_stade_dev)
+}
+# pie_stade_dev(data)
 
-#   _____                _   _                         _ _ _    __   _____ 
-#  |  ___|__  _ __   ___| |_(_) ___  _ __  _ __   __ _| (_) |_ /_/  |___ / 
-#  | |_ / _ \| '_ \ / __| __| |/ _ \| '_ \| '_ \ / _` | | | __/ _ \   |_ \ 
+
+
+# Création d'un camembert  de la répartition des arbres par situation
+pie_repartition_situation <- function(data){
+  data_situation <- data[data$fk_situation != "inconnu",]
+  data_situation$fk_situation <- droplevels(data_situation$fk_situation)
+
+  pie_chart_situation <- ggplot(data_situation, aes(x = "", fill = fk_situation)) +
+    geom_bar(width = 1) +
+    coord_polar(theta = "y") +
+    labs(title = "Répartition des arbres par situation") +
+    theme_void()  # Supprimer les axes
+  print(pie_chart_situation)
+}
+# pie_repartition_situation(data)
+
+
+
+#création d'un histogramme de la quantité d'arbres en fonction du quartier
+histogram_quartier_fct <- function(data){
+data_quartiers <- data[data$clc_quartier != "inconnu",]
+data_quartiers$clc_quartier <- droplevels(data_quartiers$clc_quartier)
+histogram_quartier <- ggplot(data_quartiers, aes(x = clc_quartier)) +
+  geom_bar(fill = "blue") +
+  labs(title = "Quantité d'arbres par quartier",
+       x = "Quartier",
+       y = "Quantité d'arbres") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+print(histogram_quartier)
+}
+# histogram_quartier_fct(data)
+
+
+#   _____                _   _                         _ _ _    __   _____
+#  |  ___|__  _ __   ___| |_(_) ___  _ __  _ __   __ _| (_) |_ /_/  |___ /
+#  | |_ / _ \| '_ \ / __| __| |/ _ \| '_ \| '_ \ / _` | | | __/ _ \   |_ \
 #  |  _| (_) | | | | (__| |_| | (_) | | | | | | | (_| | | | ||  __/  ___) |
-#  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/ 
-
+#  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/
 
 source("map.R")
 
@@ -127,6 +195,18 @@ source("map.R")
 #  |  _| (_) | | | | (__| |_| | (_) | | | | | | | (_| | | | ||  __/ |__   _|
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___|    |_|  
 
+
+
+#test chi2 pour corrélation feuillage (feuillu, conifère) et le nom de l'arbre
+kie2_cor_feuillage_nom <- function(data){
+  table_filtree_feuillage<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+  contingency_table_feuillage <- table(table_filtree_feuillage$feuillage, table_filtree_feuillage$nomlatin)
+  print(contingency_table_feuillage)
+
+  testchi2 <- chisq.test(table_filtree_feuillage$feuillage, table_filtree_feuillage$nomlatin)
+  testchi2
+}
+# kie2_cor_feuillage_nom(data)
 
 #test chi2 pour corrélation entre fk_arb_etat et fk_pied
 
@@ -174,8 +254,27 @@ mosaic_kie2_quartier_feuillage <- function(data){
                  las=2)
 }
 
+#corrélation age et diamètre tronc de l'arbre
+cor_age_diam <- function(data){
+  filtered_data_tronc_diam <- data[data$tronc_diam != 0, ]
+  correlation_value_tronc_diam <- cor(filtered_data_tronc_diam$age_estim, filtered_data_tronc_diam$tronc_diam, use = "complete.obs")
+  print(correlation_value_tronc_diam)
+  correlation_matrix_tronc_diam <- cor(filtered_data_tronc_diam[c("age_estim", "tronc_diam")], use = "complete.obs")
+  print(correlation_matrix_tronc_diam)
+}
+# cor_age_diam(data)
 
 
+
+#corrélation age et hauteur totale de l'arbre
+cor_age_haut <- function(data){
+  filtered_data_haut_tot <- data[data$haut_tot != 0, ]
+  correlation_value_haut_tot <- cor(filtered_data_haut_tot$age_estim, filtered_data_haut_tot$haut_tot, use = "complete.obs")
+  print(correlation_value_haut_tot)
+  correlation_matrix_haut_tot <- cor(filtered_data_haut_tot[c("age_estim", "haut_tot")], use = "complete.obs")
+  print(correlation_matrix_haut_tot)
+}
+# cor_age_haut(data)
 
 
 #   _____                _   _                         _ _ _    __   ____  
@@ -189,7 +288,7 @@ mosaic_kie2_quartier_feuillage <- function(data){
 #Liste des arbres à abattre
 
 lst_abattre <- function(data){
-  model <- glm(data$fk_arb_etat != "EN PLACE" ~ data$age + data$fk_stadedev + data$remarquable, family="binomial")
+  model <- glm(data$fk_arb_etat != "EN PLACE" ~ data$age_estim + data$fk_prec_estim + data$fk_stadedev + data$remarquable, family="binomial")
   # summary(model)
   resultat <- predict(model, data.frame(data),type="response")
   # plot(resultat)
@@ -200,3 +299,61 @@ lst_abattre <- function(data){
 
   return(data)
 }
+
+
+
+#fonction qui renvoit le nom des quartiers où le nombre d'arbres est inférieur à la médiane
+quartier_sous_mediane <- function(data){
+find_quartier_with_least_trees <- function(data) {
+  nb_arbres <- table(data$clc_quartier) # Calculer le nombre d'arbres par quartier
+  df_nb_arbres <- as.data.frame(nb_arbres) 
+  colnames(df_nb_arbres) <- c("Quartier", "Nombre_Arbres")
+  median_nb_arbres <- median(df_nb_arbres$Nombre_Arbres)
+  quartiers_below_median <- df_nb_arbres[df_nb_arbres$Nombre_Arbres < median_nb_arbres, "Quartier"]
+  return(quartiers_below_median)
+}
+data_quartier <- data[data$clc_quartier != "inconnu", ]
+data_quartier$clc_quartier <- droplevels(data_quartier$clc_quartier)
+quartier_moins_arbres <- find_quartier_with_least_trees(data_quartier)
+print(quartier_moins_arbres)
+}
+# quartier_sous_mediane(data)
+
+
+
+
+
+# Régression pour savoir dans quelle zone il faut planter pour harmoniser le développement global de la ville
+quartier_replanter <- function(data){
+  data_zone <- data[data$clc_quartier != "inconnu", ]
+data_zone$clc_quartier <- droplevels(data_zone$clc_quartier)
+
+nb_arbres_zone <- table(data_zone$clc_quartier) # Calcule le nombre d'arbres par quartier
+df_nb_arbres <- as.data.frame(nb_arbres_zone)
+colnames(df_nb_arbres) <- c("quartier", "nb_arbres")
+mediane_arbres <- median(df_nb_arbres$nb_arbres) # Calcule la médiane du nombre d'arbres par quartier
+
+# variable binaire : 1 si le nombre d'arbres est en dessous de la médiane, sinon 0:
+df_nb_arbres$planter <- ifelse(df_nb_arbres$nb_arbres < mediane_arbres, 1, 0)
+
+model_logistic <- glm(planter ~ quartier, data = df_nb_arbres, family = binomial) # Régression logistique
+summary(model_logistic)
+
+resultats <- list()
+
+for (quartier in df_nb_arbres$quartier) {
+  #quartier_ou_planter <- data.frame(quartier = "Quartier de l'Europe") # Régression logistique
+  #resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
+  #resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
+  #print(resultat_predit_binaire)
+
+  #créer une nouvelle colonne  dans la data frame qui sélectionne la colonne "nb d'arbres" pour les lignes correspondant au quartier égal au quartier actuel de la boucle
+  quartier_ou_planter <- data.frame(nb_arbres = df_nb_arbres[df_nb_arbres$quartier == quartier, "nb_arbres"])  
+  resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
+  resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
+  resultats[[quartier]] <- resultat_predit_binaire
+}
+
+print(resultats)
+}
+# quartier_replanter(data)
