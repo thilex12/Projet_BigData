@@ -142,13 +142,15 @@ ki2_cor_etat_pied <- function(data){
 #mosaicplot du premier test chi2
 
 mosaic_kie2_etat_pied <- function(data){
+  table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+  contingency_table <- table(table_filtree$fk_pied, table_filtree$fk_arb_etat)
   mosaicplot(contingency_table, main = "Mosaicplot des états des arbres en fonction du type de sol",
              xlab = "Type de sol (fk_pied)", ylab = "État de l'arbre (fk_arb_etat)",
              color = rainbow(length(unique(data$fk_arb_etat))),
              las=2)#place correctement les labels horizontalement/verticalement 
 }
 
-
+# mosaic_kie2_etat_pied(data)
 
 #test chi2 pour corrélation entre le quartier et le feuillage
 
@@ -164,6 +166,8 @@ kie2_cor_quartier_feuillage <- function(data){
 #mosaicplot du premier test chi2
 
 mosaic_kie2_quartier_feuillage <- function(data){
+    table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
+    contingency_table2 <- table(table_filtree2$clc_quartier, table_filtree2$feuillage)
     mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des quartiers",
                  xlab = "Quartiers (clc_quartier)", ylab = "Feuillages (feuillage) ",
                  color = rainbow(length(unique(data$fk_arb_etat))),
@@ -196,6 +200,3 @@ lst_abattre <- function(data){
 
   return(data)
 }
-
-
-
