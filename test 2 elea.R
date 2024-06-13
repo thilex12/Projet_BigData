@@ -30,11 +30,14 @@ ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
 
 
 # Calculer l'âge moyen des arbres par quartier
-moyenne_ages<-c(rep(NA,length(levels(data$clc_quartier))))
-for(i in list(levels(data$clc_quartier))){
-  moyenne_ages[i]<-mean(data$age_estim[data$clc_quartier==i])
+library(ggplot2)
+moyenne_ages <- numeric(length(levels(data$clc_quartier)))
+# Parcourir chaque niveau de clc_quartier et calculer la moyenne d'âge
+for(i in seq_along(levels(data$clc_quartier))) {
+  niveau <- levels(data$clc_quartier)[i]
+  moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == niveau], na.rm = TRUE)
 }
-data_summary <- data.frame(clc_quartier, moyenne_ages)
+data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
 
 # Représentation graphique
 ggplot(data_summary, aes(x = clc_quartier, y = age_moyen, fill = clc_quartier)) +
@@ -94,7 +97,7 @@ lst_abattre <- function(data){
   model<- glm(data$fk_arb_etat != "EN PLACE" ~ data$age + data$fk_stadedev + data$remarquable, family="binomial")
   # summary(model)
   resultat<-predict(model, data.frame(data),type="response")
-  # plot(resultat)
+  plot(resultat)
 
   arbre_a_abbatre<-resultat[resultat>0.6]
 
@@ -109,8 +112,8 @@ lst_abattre <- function(data){
 # data$abattre <- FALSE
 
 # data$abattre[resultat > 0.6] <- TRUE
-# View(data$abattre)
-
+#View(data$abattre)
+data <- lst_abattre(data)
 
 
 
