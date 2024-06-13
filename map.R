@@ -130,14 +130,6 @@ map_arbre <- function(data) {
 
 
 
-
-
-
-
-
-
-
-
 map_arbre_quartier <- function(data) {
     
 
@@ -306,7 +298,7 @@ map_web <- function(map){
 
 # map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
-map_web(map_arbre_stadedev(data))
+map_web(map_arbre(data))
 
 
 

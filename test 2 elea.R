@@ -89,16 +89,27 @@ mosaicplot(contingency_table2, main = "Mosaicplot des feuillages en fonction des
 
 
 #régression logistique => quels sont les arbres à abbatre
-model<- glm(data$fk_arb_etat!="EN PLACE"~ data$age + data$fk_stadedev + data$remarquable, family="binomial")
-summary(model)
-resultat<-predict(model, data.frame(data),type="response")
-plot(resultat)
-arbre_a_abbatre<-resultat[resultat>0.6]
-arbre_a_abbatre
 
+lst_abattre <- function(data){
+  model<- glm(data$fk_arb_etat != "EN PLACE" ~ data$age + data$fk_stadedev + data$remarquable, family="binomial")
+  # summary(model)
+  resultat<-predict(model, data.frame(data),type="response")
+  # plot(resultat)
 
+  arbre_a_abbatre<-resultat[resultat>0.6]
 
+  data$abattre <- FALSE
+  data$abattre[resultat > 0.6] <- TRUE
 
+  return(data)
+}
+# View(arbre_a_abbatre)
+# length(arbre_a_abbatre)
+
+# data$abattre <- FALSE
+
+# data$abattre[resultat > 0.6] <- TRUE
+# View(data$abattre)
 
 
 
