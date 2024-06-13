@@ -112,7 +112,7 @@ lst_abattre <- function(data){
   resultat<-predict(model, data.frame(data),type="response")
   plot(resultat)
 
-  arbre_a_abbatre<-resultat[resultat>0.6]
+  arbre_a_abbatre <- resultat[resultat>0.6]
 
   data$abattre <- FALSE
   data$abattre[resultat > 0.6] <- TRUE
