@@ -49,6 +49,7 @@ map_arbre <- function(data) {
     stadedev <- unique(data$fk_stadedev)
     colors_dev <- colorFactor(palette = rainbow(length(stadedev)), levels = stadedev)
 
+    Remarquable <- unique(data$remarquable)
 
     points_sf <- st_as_sf(data.frame(x = c(data$X), y = c(data$Y)),
                           coords = c("x", "y"),
@@ -67,8 +68,8 @@ map_arbre <- function(data) {
     data_map %>%
       leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
-      addCircles(radius = ifelse(data$remarquable == "Oui",10,2),
-                 color = ifelse(data$remarquable == "Oui","black",colors_quartiers(data$clc_quartier)),
+      addCircles(radius = 2,
+                 color = colors_quartiers(data$clc_quartier),
                  popup = ~paste("ID :", data$id_arbre,
                                 "<br>Quartier :", data$clc_quartier,
                                 "<br>Secteur :", data$clc_secteur,
@@ -112,7 +113,23 @@ map_arbre <- function(data) {
                 title = "Stade de devleoppement",
                 group = "Developpement") %>%
 
-      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement"))
+      addCircles(radius = 2,
+                 color = ifelse(data$remarquable == "Oui","black","white"),
+                 popup = ~paste("ID :", data$id_arbre,
+                                "<br>Quartier :", data$clc_quartier,
+                                "<br>Secteur :", data$clc_secteur,
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable),
+                 group = "Remarquable",
+                #  clusterOptions = markerClusterOptions(iconCreateFunction = JS("function(cluster) { return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>'}); }")),
+                ) %>%
+      addLegend(position = "bottomright",
+                colors = c("#be0000","#016801"),
+                labels = Remarquable,
+                title = "Stade de devleoppement",
+                group = "Remarquable") %>%
+
+      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable"))
 
 
     
@@ -299,8 +316,3 @@ map_web <- function(map){
 # map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
 # map_web(map_arbre(data))
-
-
-
-
-
