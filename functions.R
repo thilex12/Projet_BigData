@@ -41,7 +41,7 @@ box_haut_tot_quartier <- function(data){
     theme_minimal() + #pour enlever les carrés gris en arrière plan
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) #pour que nos titres de quartiers ne se superposent pas
 }
-
+#box_haut_tot_quartier(data)
 
 
 #Eléa
@@ -247,7 +247,7 @@ ki2_cor_etat_pied <- function(data){
   testchi2 <- chisq.test(table_filtree$fk_pied, table_filtree$fk_arb_etat)
   testchi2
 }
-
+#ki2_cor_etat_pied(data)
 
 
 #Eléa
@@ -276,7 +276,7 @@ kie2_cor_quartier_feuillage <- function(data){
   testchi2_2 <- chisq.test(data$clc_quartier, data$feuillage)
   testchi2_2
 }
-
+#kie2_cor_quartier_feuillage(data)
 
 #Eléa
 #mosaicplot du deuxieme test chi2
@@ -288,7 +288,7 @@ mosaic_kie2_quartier_feuillage <- function(data){
                  color = rainbow(length(unique(data$fk_arb_etat))),
                  las=2)
 }
-
+#mosaic_kie2_quartier_feuillage(data)
 
 
 #Carla
@@ -341,7 +341,6 @@ lst_abattre <- function(data){
 
   return(data)
 }
-
 
 
 #Carla
