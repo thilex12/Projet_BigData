@@ -415,6 +415,93 @@ quartier_replanter <- function(data){
 
 
 
+#  ------------------ Zone à replanter par quartier (Mathilde et Alexandre) ------------------ #
+
+
+  ##-- Régression logistique zone à planter --##
+
+
+replanter_alex_mathilde <- function(data){
+
+  # Focntion calculant la densité
+  densite_val <- function(data, quartier){
+    tableau <- data[data$clc_quartier == quartier, ]
+    longueur <- max(tableau$X) - min(tableau$X)
+    largueur <- max(tableau$Y) - min(tableau$Y)
+
+    superficie <- longueur * largueur
+    taille <- length(tableau$X)
+    densite<- (taille/superficie)*100
+
+    return(densite)
+  }
+
+ 
+
+  # Création de la nouvelle data frame
+
+  
+
+  data$clc_quartier <- as.factor(data$clc_quartier)
+
+  
+
+  lst_quartiers <- levels(data$clc_quartier)
+
+  lst_densites <- rep(0, length(lst_quartiers))
+
+  for (i in 1:length(lst_quartiers)) {
+
+    lst_densites[i] <- densite_val(data, lst_quartiers[i])
+
+  }
+
+  quartiers_data <- data.frame("quartiers" = levels(data$clc_quartier), "densite" = lst_densites)
+
+
+  # Créer une nouvelle colonne
+
+  quartiers_data$planter <- NA
+
+
+  # Division de la base de données
+
+  quartiers_train <- head(quartiers_data,8)
+  quartiers_test <- tail(quartiers_data, 4)
+
+
+  # Initialisation de la colonne "planter" dans la base d'entraînement
+
+  quartiers_train$planter<-FALSE
+  quartiers_train$planter[quartiers_train$densite <= 0.1 ] <- TRUE
+
+
+  # Entraînement du modèle
+
+  model_planter <- glm(planter ~ densite, data  = quartiers_train, family = "binomial")
+
+  summary(model_planter)
+
+
+  # Prédictions sur la base de test
+
+  predictions <- predict(model_planter, type = "response", newdata = quartiers_test)
+  plot(predictions)
+
+  
+
+  # Mise à jour des colonnes dans la base de données de test
+
+  quartiers_test$predictions <- predictions
+  quartiers_test$planter <- FALSE
+  quartiers_test$planter[predictions>= 0.5] <- TRUE
+}
+# replanter_alex_mathilde(data)
+
+
+# --- #
+
+
 #   _____                _   _                         _ _ _    __    __   
 #  |  ___|__  _ __   ___| |_(_) ___  _ __  _ __   __ _| (_) |_ /_/   / /_  
 #  | |_ / _ \| '_ \ / __| __| |/ _ \| '_ \| '_ \ / _` | | | __/ _ \ | '_ \ 

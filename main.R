@@ -190,6 +190,12 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 # calcul_clear_age(data)
 
 
+
+# Prediciotn quartier où il faut planter (Alexandre et Mathilde)
+
+# replanter_alex_mathilde(data)
+
+
 #   _____                _   _                         _ _ _    __    __   
 #  |  ___|__  _ __   ___| |_(_) ___  _ __  _ __   __ _| (_) |_ /_/   / /_  
 #  | |_ / _ \| '_ \ / __| __| |/ _ \| '_ \| '_ \ / _` | | | __/ _ \ | '_ \ 
