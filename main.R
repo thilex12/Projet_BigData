@@ -186,6 +186,7 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 
 
 # Prediction de l'age des arbres (-- deja inclus dans le traitement --)
+# Fonction dans "regre_age.R"
 
 # source("prediction_age.R")
 # calcul_clear_age(data)
