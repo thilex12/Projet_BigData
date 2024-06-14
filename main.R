@@ -83,6 +83,12 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/ 
 
 
+
+
+#####
+# Map disponible sur ce site : https://map-projetbigdata-g3.netlify.app/temp.html
+#####
+
 #Carte des arbres et differents layers d'information à sélectionner en haut à droite (1 à 1 pour ne pas avoir de supperposition de couleurs)
 # La creations des cartes peut prendre du temps (environ 1min max)
 # map_arbre(data)
