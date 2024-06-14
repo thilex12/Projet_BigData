@@ -167,7 +167,7 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ",")
 
 #Liste des arbres à abattre -> nouvelle colonne dans la base de données
 
-# data <- lst_abattre(data)
+data <- lst_abattre(data)
 # View(data$abattre)
 # View(data)
 

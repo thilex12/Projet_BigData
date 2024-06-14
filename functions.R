@@ -337,7 +337,7 @@ lst_abattre <- function(data){
 
 
   data$abattre <- FALSE
-  data$abattre[resultat > 0.6] <- TRUE
+  data$abattre[resultat > 0.6 & data$remarquable == "Non"] <- TRUE
 
   return(data)
 }
