@@ -30,7 +30,7 @@ data <- data[!is.na(data$Y),]
 data <- data[data$age_estim<=250,]
 data$stade_dev <- ifelse(data$age_estim == 0, "jeune", data$stade_dev)
 
-install.packages("ggplot2")
+#install.packages("ggplot2")
 library(ggplot2)
 
 ggplot(data, aes(x = clc_quartier, y = haut_tot)) +

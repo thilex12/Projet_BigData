@@ -163,4 +163,8 @@ for (quartier in df_nb_arbres$quartier) {
 
 print(resultats)
 
+ggplot(df_nb_arbres, aes(x=nb_arbres, y=planter)) +
+  geom_point() +
+  geom_smooth(method= "glm", method.args=list(family="binomial"), se= FALSE) +
+  theme_minimal()
 

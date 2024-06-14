@@ -6,8 +6,11 @@
 
 #Traitement de la base de données
 source("traitement.R")
+install.packages("ggplot2")
+library(ggplot2)
 
-#Graph sur la frequences des varaible qualitatives (ou quantitatives)
+#Alexandre
+#Graph sur la frequence des variables qualitatives (ou quantitatives)
 
 freq_categorielle <- function(tab){
   
@@ -23,7 +26,7 @@ freq_categorielle <- function(tab){
 }
 
 
-
+#Eléa
 #Boxplot de la hauteur totale des arbres par quartier
 
 box_haut_tot_quartier <- function(data){
@@ -41,7 +44,8 @@ box_haut_tot_quartier <- function(data){
 
 
 
-#Distribution des types de feuillage par quartier
+#Eléa
+#Distribution des types de feuillages par quartier
 
 feuille_par_quartier <- function(data){
   data_feuillage<-data[data$feuillage!="inconnu",]
@@ -60,7 +64,8 @@ feuille_par_quartier <- function(data){
 
 
 
-#Histogramme de la hauteur totale avec mètre par mètre
+#Carla
+#Histogramme de la hauteur totale en mètres
 
 hist_haut_tot <- function(data){
   histogram <- ggplot(data, aes(x = haut_tot)) +
@@ -76,8 +81,10 @@ hist_haut_tot <- function(data){
 
 
 
+#Carla
 #box-plot de la hauteur du tronc
-#on enlèvre les valeurs de tronc_dima qui sont égales à 0 car elles ne sont pas renseignées
+
+#on enlève les valeurs de tronc_diam qui sont égales à 0 car elles ne sont pas renseignées
 boxplot_haut_tronc <- function(data){  
   boxplot_diam_tronc <- ggplot(data[data$tronc_diam != 0, ], aes(y = data$tronc_diam[data$tronc_diam != 0])) +
   geom_boxplot(fill = "green") +
@@ -86,7 +93,7 @@ boxplot_haut_tronc <- function(data){
   theme_minimal()
 }
 
-# boxplot_haut_tronc(data)
+#boxplot_haut_tronc(data)
 
 
 #   _____                _   _                         _ _ _    __   ____  
@@ -97,8 +104,9 @@ boxplot_haut_tronc <- function(data){
 
 
 
-
+#Eléa
 # Calculer l'âge moyen des arbres par quartier
+
 mean_age_quartier <- function(data){
   moyenne_ages <- numeric(length(levels(data$clc_quartier)))
   # Parcourir chaque niveau de clc_quartier et calculer la moyenne d'âge
@@ -108,6 +116,7 @@ mean_age_quartier <- function(data){
   }
   data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
   
+  #Eléa
   # Représentation graphique
   ggplot(data_summary, aes(x = clc_quartier, y = moyenne_ages, fill = clc_quartier)) +
   geom_bar(stat = "identity") + #mets des couleurs différentes pour chaque barre
@@ -121,9 +130,16 @@ mean_age_quartier <- function(data){
 # mean_age_quartier(data)
 
 
+
+#Eléa
 #Situations des arbres en fonction de leur quartier
+
 situa_quartier <- function(data){
-  ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
+  data_situa_quart<-data[data$fk_situation!="inconnu",]
+  data_situa_quart$fk_situation<-droplevels(data_situa_quart$fk_situation)
+  
+  
+  ggplot(data_situa_quart, aes(x = clc_quartier, fill = fk_situation)) +
     geom_bar(position = "dodge") + 
     labs(title = "Situations des arbres en fonction de leur quartier",
          x = "Quartiers",
@@ -131,12 +147,17 @@ situa_quartier <- function(data){
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 }
+#situa_quartier(data)
 
 
+#Carla
+# Création d'un diagramme circulaire de la répartition des arbres par stade de développement
 
-# Création d'un camembert de la répartition des arbres par stade de développement
 pie_stade_dev <- function(data){
-  pie_chart_stade_dev <- ggplot(data, aes(x = "", fill = fk_stadedev)) +
+  data_stadedev <- data[data$fk_stadedev != "inconnu",]
+  data_stadedev$fk_stadedev <- droplevels(data_stadedev$fk_stadedev)
+  
+  pie_chart_stade_dev <- ggplot(data_stadedev, aes(x = "", fill = fk_stadedev)) +
     geom_bar(width = 1) +
     coord_polar(theta = "y") +
     labs(title = "Répartition des arbres par stade de développement") +
@@ -147,7 +168,9 @@ pie_stade_dev <- function(data){
 
 
 
-# Création d'un camembert  de la répartition des arbres par situation
+#Carla
+# Création d'un diagramme circulaire  de la répartition des arbres par situation
+
 pie_repartition_situation <- function(data){
   data_situation <- data[data$fk_situation != "inconnu",]
   data_situation$fk_situation <- droplevels(data_situation$fk_situation)
@@ -163,7 +186,9 @@ pie_repartition_situation <- function(data){
 
 
 
+#Carla
 #création d'un histogramme de la quantité d'arbres en fonction du quartier
+
 histogram_quartier_fct <- function(data){
   data_quartiers <- data[data$clc_quartier != "inconnu",]
   data_quartiers$clc_quartier <- droplevels(data_quartiers$clc_quartier)
@@ -186,7 +211,7 @@ histogram_quartier_fct <- function(data){
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/
 
 source("map.R")
-
+#Alexandre
 
 
 #   _____                _   _                         _ _ _    __   _  _   
@@ -196,8 +221,9 @@ source("map.R")
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___|    |_|  
 
 
-
+#Carla
 #test chi2 pour corrélation feuillage (feuillu, conifère) et le nom de l'arbre
+
 kie2_cor_feuillage_nom <- function(data){
   table_filtree_feuillage<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
   contingency_table_feuillage <- table(table_filtree_feuillage$feuillage, table_filtree_feuillage$nomlatin)
@@ -208,7 +234,9 @@ kie2_cor_feuillage_nom <- function(data){
 }
 # kie2_cor_feuillage_nom(data)
 
-#test chi2 pour corrélation entre fk_arb_etat et fk_pied
+
+#Eléa
+#1er test chi2, pour corrélation entre fk_arb_etat et fk_pied
 
 ki2_cor_etat_pied <- function(data){
   table_filtree<-data[data$fk_pied != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
@@ -219,6 +247,9 @@ ki2_cor_etat_pied <- function(data){
   testchi2
 }
 
+
+
+#Eléa
 #mosaicplot du premier test chi2
 
 mosaic_kie2_etat_pied <- function(data){
@@ -232,7 +263,9 @@ mosaic_kie2_etat_pied <- function(data){
 
 # mosaic_kie2_etat_pied(data)
 
-#test chi2 pour corrélation entre le quartier et le feuillage
+
+#Eléa
+#2eme test chi2, pour corrélation entre le quartier et le feuillage
 
 kie2_cor_quartier_feuillage <- function(data){
   table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
@@ -243,8 +276,9 @@ kie2_cor_quartier_feuillage <- function(data){
   testchi2_2
 }
 
-#mosaicplot du premier test chi2
 
+#Eléa
+#mosaicplot du deuxieme test chi2
 mosaic_kie2_quartier_feuillage <- function(data){
     table_filtree2<-data[data$feuillage != 'inconnu', ] #enleve toutes les données inconnues pour exécuter notre chi2
     contingency_table2 <- table(table_filtree2$clc_quartier, table_filtree2$feuillage)
@@ -254,7 +288,11 @@ mosaic_kie2_quartier_feuillage <- function(data){
                  las=2)
 }
 
+
+
+#Carla
 #corrélation age et diamètre tronc de l'arbre
+
 cor_age_diam <- function(data){
   filtered_data_tronc_diam <- data[data$tronc_diam != 0, ]
   correlation_value_tronc_diam <- cor(filtered_data_tronc_diam$age_estim, filtered_data_tronc_diam$tronc_diam, use = "complete.obs")
@@ -266,7 +304,10 @@ cor_age_diam <- function(data){
 
 
 
+
+#Carla
 #corrélation age et hauteur totale de l'arbre
+
 cor_age_haut <- function(data){
   filtered_data_haut_tot <- data[data$haut_tot != 0, ]
   correlation_value_haut_tot <- cor(filtered_data_haut_tot$age_estim, filtered_data_haut_tot$haut_tot, use = "complete.obs")
@@ -284,7 +325,7 @@ cor_age_haut <- function(data){
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___| |____/ 
 
 
-
+#Eléa
 #Liste des arbres à abattre
 
 lst_abattre <- function(data){
@@ -302,7 +343,9 @@ lst_abattre <- function(data){
 
 
 
-#fonction qui renvoit le nom des quartiers où le nombre d'arbres est inférieur à la médiane
+#Carla
+#fonction qui renvoie le nom des quartiers où le nombre d'arbres est inférieur à la médiane
+
 quartier_sous_mediane <- function(data){
   find_quartier_with_least_trees <- function(data) {
     nb_arbres <- table(data$clc_quartier) # Calculer le nombre d'arbres par quartier
@@ -322,8 +365,9 @@ quartier_sous_mediane <- function(data){
 
 
 
-
+#Carla
 # Régression pour savoir dans quelle zone il faut planter pour harmoniser le développement global de la ville
+
 quartier_replanter <- function(data){
   data_zone <- data[data$clc_quartier != "inconnu", ]
   data_zone$clc_quartier <- droplevels(data_zone$clc_quartier)
@@ -356,6 +400,7 @@ quartier_replanter <- function(data){
 
   print(resultats)
 }
+
 # quartier_replanter(data)
 
 

@@ -20,7 +20,7 @@ data_feuillage<-data[data$feuillage!="inconnu",]
 data_feuillage$feuillage<-droplevels(data_feuillage$feuillage)
 
 ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
-  geom_bar(position = "dodge") +
+  geom_bar(position = "dodge") + #permet que les barres ne se supperposent pas
   labs(title = "Distribution des types de feuillage par quartier",
        x = "Quartiers",
        y = "Nombre d'arbres",
@@ -33,11 +33,11 @@ ggplot(data_feuillage, aes(x = clc_quartier, fill = feuillage)) +
 # Calculer l'âge moyen des arbres par quartier
 library(ggplot2)
 mean_age_quartier <- function(data){
-  moyenne_ages <- numeric(length(levels(data$clc_quartier)))
+  moyenne_ages <- numeric(length(levels(data$clc_quartier))) # Créer un vecteur numérique de la longueur du nombre de niveaux différents 
   # Parcourir chaque niveau de clc_quartier et calculer la moyenne d'âge
   for(i in seq_along(levels(data$clc_quartier))) {
-    niveau <- levels(data$clc_quartier)[i]
-    moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == niveau], na.rm = TRUE)
+    niveau <- levels(data$clc_quartier)[i] #Obtention du nom du niveau actuel
+    moyenne_ages[i] <- mean(data$age_estim[data$clc_quartier == niveau], na.rm = TRUE) #supprime les NA
   }
   data_summary <- data.frame(clc_quartier = levels(data$clc_quartier), moyenne_ages = moyenne_ages)
 
@@ -54,7 +54,7 @@ mean_age_quartier <- function(data){
 
 #Situations des arbres en fonction de leur quartier
 situa_quartier <- function(data){
-  ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
+  ggplot(data, aes(x = clc_quartier, fill = fk_situation)) + #fill => spécifie que les barres du graphique doivent être colorées selon fk_situation
     geom_bar(position = "dodge") + 
     labs(title = "Situations des arbres en fonction de leur quartier",
          x = "Quartiers",
@@ -63,7 +63,7 @@ situa_quartier <- function(data){
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 }
 
-
+situa_quartier(data)
 
 #fct 4
 
