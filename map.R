@@ -131,7 +131,7 @@ map_arbre <- function(data) {
       addLegend(position = "bottomright",
                 colors = c("#be0000","#016801"),
                 labels = Remarquable,
-                title = "Stade de devleoppement",
+                title = "Abre Remarquable",
                 group = "Remarquable") %>%
 
       addCircles(radius = ifelse(data$abattre == TRUE,20,2),
@@ -147,7 +147,7 @@ map_arbre <- function(data) {
       addLegend(position = "bottomright",
                 colors = c("#be0000","#016801"),
                 labels = Remarquable,
-                title = "Stade de devleoppement",
+                title = "Arbre à abattre",
                 group = "Abattre") %>%
 
       addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable","Abattre"))
