@@ -6,6 +6,7 @@
 
 #Traitement de la base de données
 source("traitement.R")
+install.packages("ggplot2")
 library(ggplot2)
 
 #Alexandre
@@ -92,7 +93,7 @@ boxplot_haut_tronc <- function(data){
   theme_minimal()
 }
 
-# boxplot_haut_tronc(data)
+#boxplot_haut_tronc(data)
 
 
 #   _____                _   _                         _ _ _    __   ____  
@@ -153,7 +154,10 @@ situa_quartier <- function(data){
 # Création d'un diagramme circulaire de la répartition des arbres par stade de développement
 
 pie_stade_dev <- function(data){
-  pie_chart_stade_dev <- ggplot(data, aes(x = "", fill = fk_stadedev)) +
+  data_stadedev <- data[data$fk_stadedev != "inconnu",]
+  data_stadedev$fk_stadedev <- droplevels(data_stadedev$fk_stadedev)
+  
+  pie_chart_stade_dev <- ggplot(data_stadedev, aes(x = "", fill = fk_stadedev)) +
     geom_bar(width = 1) +
     coord_polar(theta = "y") +
     labs(title = "Répartition des arbres par stade de développement") +
