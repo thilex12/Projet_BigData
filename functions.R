@@ -6,6 +6,7 @@
 
 #Traitement de la base de données
 source("traitement.R")
+library(ggplot2)
 
 #Alexandre
 #Graph sur la frequence des variables qualitatives (ou quantitatives)
@@ -133,7 +134,11 @@ mean_age_quartier <- function(data){
 #Situations des arbres en fonction de leur quartier
 
 situa_quartier <- function(data){
-  ggplot(data, aes(x = clc_quartier, fill = fk_situation)) +
+  data_situa_quart<-data[data$fk_situation!="inconnu",]
+  data_situa_quart$fk_situation<-droplevels(data_situa_quart$fk_situation)
+  
+  
+  ggplot(data_situa_quart, aes(x = clc_quartier, fill = fk_situation)) +
     geom_bar(position = "dodge") + 
     labs(title = "Situations des arbres en fonction de leur quartier",
          x = "Quartiers",
@@ -141,7 +146,7 @@ situa_quartier <- function(data){
     theme_minimal() +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) 
 }
-
+#situa_quartier(data)
 
 
 #Carla
