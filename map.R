@@ -33,7 +33,7 @@
 
 map_arbre <- function(data) {
 
-    if(length(data$abattre) == 37){
+    if(length(data) == 37){
         data <- lst_abattre(data)
     }
 

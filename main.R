@@ -10,7 +10,7 @@ source("functions.R")
 
 #Traitement du la base de données
 #Utilistion d'un .csv modifier avec suppréssion des ` " ` incoherent
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".",sep = ","))
+data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec = ".", sep = ","))
 # View(data)
 
 #Toute les autres fonctions se basent sur ce data traité, si des résultat sont incohérent essayé de refaire le traitement de la base de données avec la ligne ci-dessus
