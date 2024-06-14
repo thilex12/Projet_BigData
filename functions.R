@@ -410,3 +410,21 @@ quartier_replanter <- function(data){
 
 # source("prediction_age.R")
 # calcul_clear_age(data)
+
+
+
+
+
+#   _____                _   _                         _ _ _    __    __   
+#  |  ___|__  _ __   ___| |_(_) ___  _ __  _ __   __ _| (_) |_ /_/   / /_  
+#  | |_ / _ \| '_ \ / __| __| |/ _ \| '_ \| '_ \ / _` | | | __/ _ \ | '_ \ 
+#  |  _| (_) | | | | (__| |_| | (_) | | | | | | | (_| | | | ||  __/ | (_) |
+#  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___|  \___/ 
+
+
+
+export <- function(data){
+  write.table(data, "data_export.csv", dec = ".", sep = ",", na = "NA", fileEncoding = "UTF-8")
+
+}
+# export(data)
