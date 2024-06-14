@@ -159,10 +159,10 @@ pie_stade_dev <- function(data){
   data_stadedev$fk_stadedev <- droplevels(data_stadedev$fk_stadedev)
   
   pie_chart_stade_dev <- ggplot(data_stadedev, aes(x = "", fill = fk_stadedev)) +
-    geom_bar(width = 1) +
-    coord_polar(theta = "y") +
+    geom_bar(width = 1) + #créer un diagremma à barre de largeur 1 pour chaque barre
+    coord_polar(theta = "y") + #transforme en diagramme circulaire avec y pour calculer les angles des segments
     labs(title = "Répartition des arbres par stade de développement") +
-    theme_void()  
+    theme_void()  #supprime les axes 
   print(pie_chart_stade_dev)
 }
 # pie_stade_dev(data)
@@ -199,7 +199,7 @@ histogram_quartier_fct <- function(data){
          x = "Quartier",
          y = "Quantité d'arbres") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) #hjust: ajuste alignement horizontal des étiquettes
   print(histogram_quartier)
 }
 # histogram_quartier_fct(data)
@@ -222,7 +222,7 @@ source("map.R")
 #  |_|  \___/|_| |_|\___|\__|_|\___/|_| |_|_| |_|\__,_|_|_|\__\___|    |_|  
 
 
-#Carla
+#Carla et ELéa
 #test chi2 pour corrélation feuillage (feuillu, conifère) et le nom de l'arbre
 
 kie2_cor_feuillage_nom <- function(data){
@@ -296,9 +296,9 @@ mosaic_kie2_quartier_feuillage <- function(data){
 
 cor_age_diam <- function(data){
   filtered_data_tronc_diam <- data[data$tronc_diam != 0, ]
-  correlation_value_tronc_diam <- cor(filtered_data_tronc_diam$age_estim, filtered_data_tronc_diam$tronc_diam, use = "complete.obs")
+  correlation_value_tronc_diam <- cor(filtered_data_tronc_diam$age_estim, filtered_data_tronc_diam$tronc_diam, use = "complete.obs") # use = "complete.obs" permet exclureles paires de valeurs des NA
   print(correlation_value_tronc_diam)
-  correlation_matrix_tronc_diam <- cor(filtered_data_tronc_diam[c("age_estim", "tronc_diam")], use = "complete.obs")
+  correlation_matrix_tronc_diam <- cor(filtered_data_tronc_diam[c("age_estim", "tronc_diam")],use = "complete.obs")
   print(correlation_matrix_tronc_diam)
 }
 # cor_age_diam(data)
@@ -372,7 +372,7 @@ quartier_replanter <- function(data){
   data_zone <- data[data$clc_quartier != "inconnu", ]
   data_zone$clc_quartier <- droplevels(data_zone$clc_quartier)
 
-  nb_arbres_zone <- table(data_zone$clc_quartier) # Calcule le nombre d'arbres par quartier
+  nb_arbres_zone <- table(data_zone$clc_quartier) # table de contingence  qui calcule le nombre d'arbres par quartier
   df_nb_arbres <- as.data.frame(nb_arbres_zone)
   colnames(df_nb_arbres) <- c("quartier", "nb_arbres")
   mediane_arbres <- median(df_nb_arbres$nb_arbres) # Calcule la médiane du nombre d'arbres par quartier
@@ -383,7 +383,7 @@ quartier_replanter <- function(data){
   model_logistic <- glm(planter ~ quartier, data = df_nb_arbres, family = binomial) # Régression logistique
   summary(model_logistic)
 
-  resultats <- list()
+  resultats <- list() #initialise une liste
 
   for (quartier in df_nb_arbres$quartier) {
     #quartier_ou_planter <- data.frame(quartier = "Quartier de l'Europe") # Régression logistique
@@ -391,11 +391,12 @@ quartier_replanter <- function(data){
     #resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
     #print(resultat_predit_binaire)
 
-    #créer une nouvelle colonne  dans la data frame qui sélectionne la colonne "nb d'arbres" pour les lignes correspondant au quartier égal au quartier actuel de la boucle
-    quartier_ou_planter <- data.frame(nb_arbres = df_nb_arbres[df_nb_arbres$quartier == quartier, "nb_arbres"])  
+    #Crée un dataframe quartier_ou_planter contenant le nombre d'arbres pour le quartier actuel de la boucle:
+    quartier_ou_planter <- data.frame(nb_arbres = df_nb_arbres[df_nb_arbres$quartier == quartier, "nb_arbres"])
+    #Utilise le modèle logistique pour prédire la probabilité de planter des arbres dans le quartier actuel:
     resultat_predit <- predict(model_logistic, quartier_ou_planter, type = "response")
-    resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non")
-    resultats[[quartier]] <- resultat_predit_binaire
+    resultat_predit_binaire <- ifelse(resultat_predit > 0.5, "oui", "non") #réponse binaire en "oui" ou "non"
+    resultats[[quartier]] <- resultat_predit_binaire # Ajoute le résultat prédit binaire (oui ou non) à la liste "resultats" sous le nom du quartier
   }
 
   print(resultats)
