@@ -4,6 +4,8 @@
 install.packages("dplyr")
 library("dplyr")
 
+source("regre_age.R")
+
 traitement <- function(data) {
 
 
@@ -18,7 +20,8 @@ traitement <- function(data) {
     data[, i] <- as.Date(data[, i])
   }
 
-
+  data$fk_nomtech[is.na(data$fk_nomtech)] <- "inconnu"
+  data$fk_nomtech[data$fk_nomtech == ""] <- "inconnu"
 
 
   #Arbre sans quartier
@@ -148,6 +151,9 @@ traitement <- function(data) {
 
 
   # length(data[,1])
+
+  data <- calcul_clear_age(data)
+
   return(data)
 
 }

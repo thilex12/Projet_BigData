@@ -1,7 +1,7 @@
-source("Script.R")
+# source("Script.R")
 
 
-data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
+# data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
  
 
 
@@ -24,13 +24,16 @@ data <- traitement(read.csv("Patrimoine_Arbore_modif.csv", dec='.',sep=','))
 
 
 # install.packages('sf')
-library(dplyr)
+# library(dplyr)
 
 
 
 
 map_arbre <- function(data) {
-    
+
+    if(length(data$abattre) == 37){
+        data <- lst_abattre(data)
+    }
 
     install.packages("sf")
     install.packages("dplyr")
@@ -49,6 +52,7 @@ map_arbre <- function(data) {
     stadedev <- unique(data$fk_stadedev)
     colors_dev <- colorFactor(palette = rainbow(length(stadedev)), levels = stadedev)
 
+    Remarquable <- unique(data$remarquable)
 
     points_sf <- st_as_sf(data.frame(x = c(data$X), y = c(data$Y)),
                           coords = c("x", "y"),
@@ -67,8 +71,8 @@ map_arbre <- function(data) {
     data_map %>%
       leaflet(options = leafletOptions(preferCanvas = TRUE)) %>%
       addTiles() %>%
-      addCircles(radius = ifelse(data$remarquable == "Oui",10,2),
-                 color = ifelse(data$remarquable == "Oui","black",colors_quartiers(data$clc_quartier)),
+      addCircles(radius = 2,
+                 color = colors_quartiers(data$clc_quartier),
                  popup = ~paste("ID :", data$id_arbre,
                                 "<br>Quartier :", data$clc_quartier,
                                 "<br>Secteur :", data$clc_secteur,
@@ -92,10 +96,10 @@ map_arbre <- function(data) {
                  group = "Etat"
                 ) %>%
       addLegend(position = "bottomright",
-        colors = colors_etat(etats),
-        labels = etats,
-        title = "Etat de l'arbre",
-        group = "Etat") %>%
+                colors = colors_etat(etats),
+                labels = etats,
+                title = "Etat de l'arbre",
+                group = "Etat") %>%
 
       addCircles(radius = 2,
                  color = colors_dev(data$fk_stadedev),
@@ -107,15 +111,44 @@ map_arbre <- function(data) {
                  group = "Developpement"
                 ) %>%
       addLegend(position = "bottomright",
-      colors = colors_dev(stadedev),
-      labels = stadedev,
-      title = "Stade de devleoppement",
-      group = "Developpement") %>%
+                colors = colors_dev(stadedev),
+                labels = stadedev,
+                title = "Stade de devleoppement",
+                group = "Developpement") %>%
 
-      addLayersControl(baseGroups = c("Quartiers", "Etat de l'arbre", "Developpement"))
+      addCircles(radius = 2,
+                 color = ifelse(data$remarquable == "Oui","black","white"),
+                 popup = ~paste("ID :", data$id_arbre,
+                                "<br>Quartier :", data$clc_quartier,
+                                "<br>Secteur :", data$clc_secteur,
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable),
+                 group = "Remarquable",
+                #  clusterOptions = markerClusterOptions(iconCreateFunction = JS("function(cluster) { return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>'}); }")),
+                ) %>%
+      addLegend(position = "bottomright",
+                colors = c("#be0000","#016801"),
+                labels = Remarquable,
+                title = "Stade de devleoppement",
+                group = "Remarquable") %>%
 
+      addCircles(radius = ifelse(data$abattre == TRUE,20,2),
+                 color = ifelse(data$abattre == TRUE,"red","green"),
+                 popup = ~paste("ID :", data$id_arbre,
+                                "<br>Quartier :", data$clc_quartier,
+                                "<br>Secteur :", data$clc_secteur,
+                                "<br>Etat :", data$fk_arb_etat,
+                                "<br> Remarquable :", data$remarquable),
+                 group = "Abattre",
+                #  clusterOptions = markerClusterOptions(iconCreateFunction = JS("function(cluster) { return L.divIcon({html: '<b>' + cluster.getChildCount() + '</b>'}); }")),
+                ) %>%
+      addLegend(position = "bottomright",
+                colors = c("#be0000","#016801"),
+                labels = Remarquable,
+                title = "Stade de devleoppement",
+                group = "Abattre") %>%
 
-    
+      addLayersControl(overlayGroups = c("Quartiers", "Etat", "Developpement", "Remarquable","Abattre"))
 }
 
 
@@ -280,8 +313,8 @@ map_arbre_stadedev <- function(data) {
 
 
 #Save map .html & .png
-saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
-webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
+# saveWidget(map_arbre(data), "temp.html", selfcontained = FALSE)
+# webshot("temp.html", file = "Rplot.png", cliprect = "viewport")
 
 
 map_web <- function(map){
@@ -298,9 +331,4 @@ map_web <- function(map){
 
 # map_web(map_arbre(data))
 # map_web(map_arbre_etat(data))
-map_web(map_arbre(data))
-
-
-
-
-
+# map_web(map_arbre(data))
