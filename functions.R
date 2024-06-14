@@ -94,7 +94,7 @@ boxplot_haut_tronc <- function(data){
   boxplot_diam_tronc
 }
 
-boxplot_haut_tronc(data)
+# boxplot_haut_tronc(data)
 
 
 #   _____                _   _                         _ _ _    __   ____  
