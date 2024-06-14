@@ -357,3 +357,11 @@ quartier_replanter <- function(data){
   print(resultats)
 }
 # quartier_replanter(data)
+
+
+
+
+# Prediction de l'age des arbres (-- deja inclus dans le traitement --)
+
+# source("prediction_age.R")
+# calcul_clear_age(data)
