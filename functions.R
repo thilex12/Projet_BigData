@@ -159,7 +159,7 @@ pie_stade_dev <- function(data){
   data_stadedev$fk_stadedev <- droplevels(data_stadedev$fk_stadedev)
   
   pie_chart_stade_dev <- ggplot(data_stadedev, aes(x = "", fill = fk_stadedev)) +
-    geom_bar(width = 1) + #créer un diagremma à barre de largeur 1 pour chaque barre
+    geom_bar(width = 1) + #créer un diagramme à barre de largeur 1 pour chaque barre
     coord_polar(theta = "y") + #transforme en diagramme circulaire avec y pour calculer les angles des segments
     labs(title = "Répartition des arbres par stade de développement") +
     theme_void()  #supprime les axes 
